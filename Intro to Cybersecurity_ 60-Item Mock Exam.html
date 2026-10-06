@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<<<<<<< HEAD
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Intro to Cybersecurity – 60-Item Mock Exam</title>
+<style>
+:root{--bg:#eef3f2;--c:#fff;--t:#10231f;--m:#5b6b67;--b:#cfdad7;--p:#0f766e;--ok:#15803d;--okb:#dcfce7;--no:#b91c1c;--nob:#fee2e2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1715;--c:#15251f;--t:#e6f1ee;--m:#9bb0aa;--b:#2a403a;--p:#2dd4bf;--ok:#4ade80;--okb:#12351f;--no:#f87171;--nob:#3b1717}}
+:root[data-theme="dark"]{--bg:#0d1715;--c:#15251f;--t:#e6f1ee;--m:#9bb0aa;--b:#2a403a;--p:#2dd4bf;--ok:#4ade80;--okb:#12351f;--no:#f87171;--nob:#3b1717}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:700px;margin:0 auto;padding:16px}
+h1{font:700 21px Georgia,serif;margin:0}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#st{color:var(--m);font-size:14px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip,.rs{border:1.5px solid var(--b);border-radius:20px;padding:6px 14px;font:inherit;font-size:14px;background:var(--c);color:var(--t);cursor:pointer}
+.chip:has(input:checked){border-color:var(--p);background:var(--p);color:var(--bg)}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip:has(input:focus-visible),.rs:focus-visible,.o:focus-visible,.p:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.bar{height:6px;background:var(--b);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--p);transition:width .3s}
+.card{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:18px;margin-top:14px}
+.tag{font-size:13px;color:var(--p);font-weight:600}
+.n{font-size:13px;color:var(--m)}
+h2{font:600 19px/1.4 Georgia,serif;margin:8px 0 6px}
+.o{display:block;width:100%;text-align:left;margin-top:10px;padding:12px 14px;border:1.5px solid var(--b);border-radius:10px;background:var(--c);color:var(--t);font:inherit;cursor:pointer}
+.o:hover:not(:disabled){border-color:var(--p)}
+.o:disabled{cursor:default;opacity:1}
+.o.ok{border-color:var(--ok);background:var(--okb)}.o.no{border-color:var(--no);background:var(--nob)}
+.fb{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:15px}
+.fb.ok{background:var(--okb)}.fb.no{background:var(--nob)}
+.p{background:var(--p);color:var(--bg);border:0;border-radius:10px;padding:10px 18px;font:inherit;font-weight:600;cursor:pointer;margin-top:14px}
+.big{font:700 38px Georgia,serif;margin:6px 0}
+.row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--b);font-size:15px}
+</style></head><body><div class="w">
+<div class="top"><h1>Intro to Cybersecurity: Mock Exam</h1><span id="st"></span></div>
+<div class="ctl">
+<label class="chip"><input type="checkbox" id="sh"> Shuffle</label>
+<label class="chip"><input type="checkbox" id="md"> Organize by module</label>
+<button class="rs" id="rs">Restart</button></div>
+<div class="bar"><i id="bar"></i></div>
+<div class="card" id="main"></div>
+</div>
+<script>
+const MOD=["Threats, Vulnerabilities & Attacks","Securing Networks","Attacking the Foundation","Attacking What We Do","Wireless Network Communication","Network Security Infrastructure"];
+// [module, question, [correct, wrong, wrong, wrong], explanation]
+const Q=[
+[1,"Anything that could potentially cause harm to a system, network or data is called a:",["Threat","Vulnerability","Exploit","Backdoor"],"A threat is a potential cause of harm. It doesn't mean an attack has already happened."],
+[1,"Which malware spreads by itself through network vulnerabilities, without attaching to another file?",["Worm","Virus","Trojan horse","Logic bomb"],"A worm replicates on its own. A virus must attach to a file and spread when that file runs."],
+[1,"Malicious code that stays inactive until a set date or condition occurs is a:",["Logic bomb","Rootkit","Keylogger","Worm"],"A logic bomb waits for its trigger (a date, a database entry) before doing damage."],
+[1,"An attacker watches a victim type an ATM PIN. This is:",["Shoulder surfing","Dumpster diving","Tailgating","Pharming"],"Shoulder surfing steals information by watching. Dumpster diving searches trash instead."],
+[1,"Phishing aimed at high-profile people such as executives is called:",["Whaling","Vishing","Smishing","Pharming"],"Whaling targets 'big catches'. Vishing uses phone calls, smishing uses text messages."],
+[1,"Phishing sent through SMS text messages is called:",["Smishing","Vishing","Whaling","Typosquatting"],"Smishing = SMS phishing. Vishing is phishing by voice."],
+[1,"An attacker enters malicious statements into an input field the app doesn't validate. This is:",["SQL injection","Cross-site scripting","Buffer overflow","Replay attack"],"SQL injection abuses unvalidated input to run database commands. XSS runs scripts in a browser."],
+[1,"Exploiting a vulnerability before the vendor has released a patch is a:",["Zero-day attack","Replay attack","Race condition","Algorithm attack"],"'Zero-day' means defenders have had essentially no time to fix the flaw."],
+[1,"Which attack injects malicious scripts into a web page that run in the victim's browser?",["Cross-site scripting (XSS)","Directory traversal","DNS spoofing","MAC flooding"],"XSS runs attacker scripts in the browser and can steal cookies or session tokens."],
+[1,"Writing more data into a memory buffer than it can hold is a:",["Buffer overflow","Race condition","Resource exhaustion","Privilege escalation"],"The extra data overwrites nearby memory, which can crash the system or give the attacker control."],
+[2,"The likelihood that a threat will exploit a vulnerability and cause harm is:",["Risk","Threat","Exploit","Attack surface"],"Threat = what can cause harm, vulnerability = the weakness, risk = the chance the weakness is used."],
+[2,"In the house analogy (burglar, unlocked door), the unlocked door is the:",["Vulnerability","Threat","Risk","Exploit"],"The burglar is the threat; the unlocked door is the weakness, i.e. the vulnerability."],
+[2,"The total collection of vulnerabilities and access points an attacker can use is the:",["Attack surface","Attack vector","Exploit","Risk"],"The attack surface is all possible 'doors'. An attack vector is one path an attacker takes."],
+[2,"The path or method a threat actor uses to reach a host or network (e.g. email, USB) is a(n):",["Attack vector","Attack surface","Indicator of attack","Risk"],"A vector is the route in. The surface is the full set of possible entry points."],
+[2,"Buying cyber insurance to cover financial losses is an example of risk:",["Transfer","Acceptance","Avoidance","Reduction"],"Transfer shifts some or all of the risk to another party."],
+[2,"A risk would cost more to fix than it would cause, so the organization does nothing. This is risk:",["Acceptance","Avoidance","Reduction","Transfer"],"Acceptance means living with a risk because dealing with it costs more."],
+[2,"Which hacker uses their skills legally and with permission, e.g. for penetration testing?",["White hat","Black hat","Gray hat","Script kiddie"],"White hats are ethical hackers who are authorized to find vulnerabilities."],
+[2,"An inexperienced attacker who relies on tools and scripts made by others is a:",["Script kiddie","Vulnerability broker","State-sponsored hacker","Hacktivist"],"Script kiddies use existing tools rather than creating their own."],
+[2,"A threat actor motivated by political or social causes is a:",["Hacktivist","Cybercriminal","Script kiddie","Gray hat"],"Hacktivists leak data, publish messages or launch DDoS for a cause. Cybercriminals want money."],
+[2,"An Indicator of Attack (IOA) focuses on:",["Attacker behavior and strategy","Evidence a breach already occurred","A known malware signature","A suspicious IP address"],"IOC = evidence after the fact (signatures, IPs, domains). IOA = how the attacker is attacking."],
+[3,"What key weakness of IP makes address spoofing possible?",["It doesn't verify the source address","It always fragments packets","It requires a handshake","It only uses 32-bit addresses"],"IP delivers packets but doesn't check that the sender's address is real."],
+[3,"What happens when an IPv4 packet's TTL reaches zero?",["The router discards it","It's delivered anyway","It's fragmented","It's re-encrypted"],"Each router lowers TTL by 1; discarding at zero stops packets from looping forever."],
+[3,"How many bits are in an IPv6 address?",["128","32","64","256"],"IPv6 uses 128-bit addresses. IPv4 uses 32-bit addresses."],
+[3,"The IPv6 header field that replaces IPv4's TTL is:",["Hop Limit","Next Header","Flow Label","Traffic Class"],"TTL becomes Hop Limit, and Protocol becomes Next Header."],
+[3,"Which ICMP message can redirect traffic through a compromised device, enabling MitM?",["ICMP Redirect","ICMP Echo Reply","ICMP Unreachable","ICMP Mask Reply"],"Redirects change the path traffic takes. Unreachable and mask replies mainly help reconnaissance."],
+[3,"A Smurf attack is an example of a(n):",["Amplification and reflection attack","Session hijacking","ARP poisoning","Replay attack"],"It uses other systems to multiply and reflect traffic toward the victim."],
+[3,"What is the correct order of the TCP three-way handshake?",["SYN, SYN-ACK, ACK","ACK, SYN, SYN-ACK","SYN, ACK, SYN-ACK","SYN-ACK, SYN, ACK"],"The client sends SYN, the server replies SYN-ACK, and the client confirms with ACK."],
+[3,"In a TCP SYN flood, the attacker:",["Sends many spoofed SYNs and never completes handshakes","Takes over an authenticated session","Sends floods of UDP packets","Poisons the target's ARP cache"],"The server keeps waiting for the final ACK until its resources run out."],
+[3,"Which transport protocol is connectionless with low overhead, suited to VoIP and streaming?",["UDP","TCP","ICMP","IPv6"],"UDP skips handshakes, retransmission and flow control, so it's fast and lightweight."],
+[3,"An attacker takes over an authenticated connection by spoofing the IP and predicting sequence numbers. This is TCP:",["Session hijacking","SYN flood","Session termination","Reflection"],"Hijacking takes control of an existing session. A SYN flood only exhausts resources."],
+[4,"What does ARP do on a local network?",["Finds the MAC address for a known IP","Translates domain names to IPs","Assigns IP addresses","Encrypts local traffic"],"ARP asks 'who has this IP?' and gets a MAC address back. Name translation is DNS."],
+[4,"In ARP cache poisoning, the attacker links their own MAC address to the IP of the:",["Default gateway","Attacker's own router","DHCP lease","DNS root server"],"Traffic then flows through the attacker, enabling a MitM attack."],
+[4,"Active ARP poisoning differs from passive because the attacker:",["Modifies traffic or injects data","Only steals information","Only scans ports","Blocks all traffic"],"Passive = steal confidential information. Active = modify or inject."],
+[4,"False DNS records placed in a resolver's cache to redirect users is DNS:",["Cache poisoning","Tunneling","Fast flux","Amplification"],"Poisoned cache entries send users to attacker-controlled sites."],
+[4,"Hiding data or malware communication inside DNS queries is called DNS:",["Tunneling","Amplification","Cache poisoning","Resource utilization"],"Data is encoded into pieces and carried in DNS queries to avoid detection."],
+[4,"Rapidly changing the IP addresses tied to a malicious domain is known as:",["Fast flux","Domain shadowing","DNS tunneling","Typosquatting"],"Fast flux hides malicious infrastructure. Domain shadowing hides subdomains in a hijacked domain."],
+[4,"An HTTP status code starting with 5xx means:",["Server error","Client error","Redirection","Success"],"1xx info, 2xx success, 3xx redirect, 4xx client error, 5xx server error."],
+[4,"Using look-alike characters to make fake text or addresses look legitimate is a:",["Homoglyph","Backdoor","Open relay","Logic bomb"],"A homoglyph swaps in characters that look identical or similar to the real ones."],
+[4,"Which worm-mitigation phase involves patching vulnerable systems?",["Inoculation","Containment","Quarantine","Treatment"],"Contain, then inoculate (patch), quarantine infected machines, and finally treat (clean)."],
+[4,"Requiring a password plus a one-time code is an example of:",["Multifactor authentication","Port security","Minimum trust","DHCP snooping"],"MFA requires two or more independent proofs of identity."],
+[5,"What is the main difference between WLANs and wired LANs?",["Wireless uses radio signals instead of cables","Wireless can't use IP","Wireless doesn't use frames","Wireless needs no security"],"The physical medium is radio frequency rather than cables."],
+[5,"Why do WLANs use CSMA/CA (collision avoidance) instead of collision detection?",["Devices can't listen while transmitting","Wi-Fi never has collisions","Frames are too large","Cables are required"],"Wireless devices can't detect collisions like wired Ethernet, so they listen first and avoid them."],
+[5,"In passive discovery, the access point:",["Broadcasts beacon frames","Waits for probe requests","Sends only RTS frames","Queries a RADIUS server"],"Beacons announce the SSID, supported standards and security settings."],
+[5,"Which discovery method has the client send a probe request for a particular SSID?",["Active discovery","Passive discovery","Beaconing","SSID cloaking"],"In active discovery the client asks and the AP responds."],
+[5,"A Wireless LAN Controller (WLC) is used to:",["Centrally manage multiple access points","Encrypt traffic with TKIP","Filter MACs on one AP","Broadcast beacons"],"A WLC manages lightweight APs from one place, which makes configuration and monitoring easier."],
+[5,"An unauthorized wireless access point connected to an organization's network is a:",["Rogue AP","LWAP","WLC","Guest SSID"],"A rogue AP can expose network resources. An evil twin is a rogue AP that also copies a real SSID."],
+[5,"A fake AP that copies a legitimate SSID, often with a stronger signal, is a(n):",["Evil twin","LWAP","Cloaked SSID","MAC filter"],"Clients may join the stronger fake and the attacker can intercept their traffic."],
+[5,"SSID cloaking:",["Disables the SSID broadcast","Encrypts the SSID","Blocks specific MAC addresses","Replaces the password"],"Users must enter the network name manually to connect."],
+[5,"Which encryption method does WPA2 use?",["AES","TKIP","RC4","MD5"],"WPA used TKIP to improve on WEP. WPA2 moved to the stronger AES."],
+[5,"WPA2 Enterprise authenticates users with:",["RADIUS with 802.1X/EAP","A pre-shared key","MAC filtering","SSID hiding"],"WPA2 Personal uses a shared password (PSK). Enterprise uses centralized authentication."],
+[6,"Which AAA function decides what an authenticated user is allowed to do?",["Authorization","Authentication","Accounting","Encryption"],"Authentication = who are you? Authorization = what can you do? Accounting = what did you do?"],
+[6,"A DMZ is best described as a:",["Zone for public-facing servers between networks","Encrypted tunnel between sites","Server that collects logs","Controller for wireless APs"],"It lets outside users reach certain servers without exposing the internal network."],
+[6,"What is the key difference between an IPS and an IDS?",["An IPS can stop malicious traffic","An IDS can stop malicious traffic","An IPS never raises alerts","An IDS only runs on hosts"],"IDS = detect and alert. IPS = detect and prevent."],
+[6,"A firewall that tracks active connections in a state table is:",["Stateful","Packet-filtering only","A standard ACL","A syslog server"],"Stateful firewalls remember connections, so they make smarter decisions than simple packet filters."],
+[6,"A standard IPv4 ACL mainly filters on the:",["Source IP address","Destination port","Protocol type","Destination IP"],"Extended ACLs add protocol, destination IP and ports."],
+[6,"Which feature copies network traffic to a monitoring device such as an IDS?",["Port mirroring","NetFlow","Syslog","NTP"],"Port mirroring sends a copy of traffic to analyzers. NetFlow only gives flow statistics."],
+[6,"Why is NTP important to security analysts?",["Shared accurate time lets them order events","It encrypts log files","It authenticates users","It blocks DoS traffic"],"If device clocks disagree, it's hard to tell what happened first during an incident."],
+[6,"Which AAA function records what a user did and for how long?",["Accounting","Authentication","Authorization","Encryption"],"Accounting tracks resources accessed, changes made and usage."],
+[6,"Compared with RADIUS, TACACS+:",["Uses TCP and encrypts the whole packet","Uses UDP and encrypts only the password","Combines authentication and authorization","Is the open RFC standard"],"RADIUS uses UDP, encrypts only the password and is the open standard. TACACS+ separates AAA."],
+[6,"Which VPN type securely connects a headquarters to a branch office?",["Site-to-site VPN","Remote-access VPN","Clientless proxy","DMZ"],"Remote-access VPNs connect individual users. Site-to-site joins two networks."]
+];
+const $=id=>document.getElementById(id);
+const sh=a=>{a=a.slice();for(let i=a.length;i>1;){const j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let ex,i,score,R,ans;
+function start(){
+  const S=$('sh').checked,M=$('md').checked;
+  let L=Q.map((q,n)=>({n,m:q[0],q:q[1],c:q[2][0],d:q[2].slice(1),e:q[3]}));
+  if(S)L=sh(L);
+  if(M)L.sort((a,b)=>a.m-b.m||(S?0:a.n-b.n));
+  else if(!S)L.sort((a,b)=>(a.n%10)*6+(a.n/10|0)-((b.n%10)*6+(b.n/10|0)));
+  L.forEach(x=>{if(S)x.o=sh([x.c,...x.d]);else{x.o=x.d.slice();x.o.splice((x.n*3+1)%4,0,x.c)}});
+  ex=L;i=0;score=0;R={};show();
+}
+function show(){
+  if(i>=ex.length)return done();
+  const q=ex[i];ans=0;
+  $('bar').style.width=i/ex.length*100+'%';
+  $('st').textContent='Score '+score+'/'+i;
+  $('main').innerHTML='<div class="tag">Module '+q.m+': '+MOD[q.m-1]+'</div><div class="n">Question '+(i+1)+' of '+ex.length+'</div><h2>'+q.q+'</h2>'+
+    q.o.map((t,k)=>'<button class="o" data-k="'+k+'"><b>'+'ABCD'[k]+'.</b> '+t+'</button>').join('')+'<div id="fb"></div>';
+  window.scrollTo(0,0);
+}
+function done(){
+  $('bar').style.width='100%';
+  $('st').textContent='Score '+score+'/'+ex.length;
+  const p=Math.round(score/ex.length*100);
+  $('main').innerHTML='<h2>Exam complete</h2><div class="big">'+score+' / '+ex.length+' ('+p+'%)</div><p>'+
+    (p>=90?'Excellent work!':p>=75?'Good job. Review the questions you missed.':'Keep studying. Check the weaker modules below.')+'</p>'+
+    MOD.map((n,k)=>{const r=R[k+1]||[0,0];return '<div class="row"><span>Module '+(k+1)+': '+n+'</span><b>'+r[0]+'/'+r[1]+'</b></div>'}).join('')+
+    '<button class="p" id="again">Restart exam</button>';
+  window.scrollTo(0,0);
+}
+$('main').onclick=e=>{
+  if(e.target.closest('#again'))return start();
+  if(e.target.closest('#nx')){i++;return show()}
+  const b=e.target.closest('.o');
+  if(!b||ans)return;ans=1;
+  const q=ex[i],pick=q.o[b.dataset.k],ok=pick===q.c;
+  (R[q.m]=R[q.m]||[0,0])[1]++;
+  if(ok){score++;R[q.m][0]++}
+  document.querySelectorAll('.o').forEach(x=>{x.disabled=true;if(q.o[x.dataset.k]===q.c)x.classList.add('ok')});
+  if(!ok)b.classList.add('no');
+  $('st').textContent='Score '+score+'/'+(i+1);
+  $('fb').innerHTML='<div class="fb '+(ok?'ok':'no')+'"><b>'+(ok?'✓ Correct!':'✗ Not quite.')+'</b> '+
+    (ok?'':'<b>'+pick+'</b> is incorrect. The right answer is <b>'+q.c+'</b>. ')+q.e+'</div>'+
+    '<button class="p" id="nx">'+(i+1<ex.length?'Next question':'See results')+'</button>';
+};
+$('sh').onchange=$('md').onchange=$('rs').onclick=start;
+start();
+</script></body></html>
+=======
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEED 003 · Lesson 2.2 Mock LSQ#2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wall-1:#e9e1cd; --wall-2:#d9cfb2;
+    --wood-1:#6d4a31; --wood-2:#432b1a;
+    --board-1:#24392c; --board-2:#1a2a21;
+    --chalk:#f2eee1; --chalk-dim:#b9c2b6;
+    --yellow:#e3bf5a; --blue:#79b0bd; --mint:#84c397; --coral:#e17766;
+    --line: rgba(242,238,225,0.16);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(255,255,255,0.35), transparent 55%),
+      radial-gradient(ellipse at 80% 100%, rgba(0,0,0,0.06), transparent 55%),
+      linear-gradient(160deg, var(--wall-1), var(--wall-2));
+    font-family:"IBM Plex Sans", sans-serif; color:#2b241a;
+    display:flex; justify-content:center; align-items:flex-start;
+    padding:36px 16px 60px;
+  }
+  .frame{
+    width:100%; max-width:760px;
+    background:linear-gradient(160deg, var(--wood-1), var(--wood-2));
+    border-radius:16px; padding:16px;
+    box-shadow: 0 40px 70px -30px rgba(30,18,8,0.5), 0 2px 0 rgba(255,255,255,0.10) inset, 0 -2px 0 rgba(0,0,0,0.25) inset;
+  }
+  .board{
+    position:relative;
+    background:radial-gradient(ellipse at 30% -10%, #2c4433 0%, var(--board-1) 45%, var(--board-2) 100%);
+    border-radius:8px; padding:26px 24px 20px; color:var(--chalk);
+    min-height:440px; overflow:hidden; box-shadow: inset 0 0 60px rgba(0,0,0,0.35);
+  }
+  .board::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 3px 3px; opacity:0.5; pointer-events:none;
+  }
+  .tray{ display:flex; gap:8px; justify-content:center; padding-top:14px; }
+  .chalk-dot{width:11px;height:7px;border-radius:2px; opacity:0.85; transform:rotate(-3deg);}
+
+  .eyebrow{ display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:var(--chalk-dim); margin-bottom:14px; gap:10px; flex-wrap:wrap; }
+  .eyebrow .part-tag{ color:var(--chalk); font-weight:600; letter-spacing:0.02em; }
+  .restart-link{ background:none;border:1px solid var(--line); color:var(--chalk-dim); font-family:inherit; font-size:12px; padding:5px 10px; border-radius:999px; cursor:pointer; transition:all .15s; }
+  .restart-link:hover{ color:var(--chalk); border-color:var(--chalk-dim); }
+
+  .progress-track{ height:5px; background:rgba(242,238,225,0.12); border-radius:999px; overflow:hidden; margin-bottom:18px; }
+  .progress-fill{ height:100%; background:linear-gradient(90deg, var(--blue), var(--mint)); border-radius:999px; transition:width .35s ease; }
+
+  .timer-row{ display:flex; justify-content:flex-end; margin:-8px 0 10px; }
+  .timer-wrap{ display:flex; align-items:center; gap:8px; color:var(--chalk-dim); font-size:12px; }
+  .timer-ring-svg{ transform:rotate(-90deg); }
+  .timer-ring-bg{ fill:none; stroke:rgba(242,238,225,0.15); stroke-width:4; }
+  .timer-ring-fg{ fill:none; stroke:var(--yellow); stroke-width:4; stroke-linecap:round; transition:stroke-dashoffset 1s linear, stroke .3s; }
+  .timer-num{ font-weight:600; font-size:12px; fill:var(--chalk); font-family:"IBM Plex Sans",sans-serif; }
+
+  h1,h2,h3{ font-family:"Kalam", cursive; font-weight:700; margin:0; }
+  .headline{ font-size:26px; line-height:1.3; }
+
+  .prompt{ font-size:19px; line-height:1.5; margin:4px 0 20px; color:var(--chalk); }
+
+  .options-col{ display:flex; flex-direction:column; gap:10px; }
+  .opt{
+    display:flex; align-items:center; gap:12px; border:1.5px dashed var(--line);
+    border-radius:9px; padding:12px 14px; background:rgba(242,238,225,0.02);
+    cursor:pointer; transition:background .15s, border-color .15s, transform .1s;
+    font-size:15px; color:var(--chalk);
+  }
+  .opt:hover:not(.locked-opt){ background:rgba(242,238,225,0.07); border-color:var(--chalk-dim); }
+  .opt:active:not(.locked-opt){ transform:scale(0.99); }
+  .opt .mark{ flex-shrink:0; width:24px; height:24px; border-radius:50%; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; }
+  .opt-correct{ border-color:var(--mint); background:rgba(132,195,151,0.14); }
+  .opt-correct .mark{ border-color:var(--mint); background:var(--mint); color:#12261a; }
+  .opt-incorrect{ border-color:var(--coral); background:rgba(225,119,102,0.14); }
+  .opt-incorrect .mark{ border-color:var(--coral); background:var(--coral); color:#2b1410; }
+  .opt-reveal{ border-color:var(--mint); border-style:solid; }
+  .opt-reveal .mark{ border-color:var(--mint); }
+  .locked-opt{ cursor:default; }
+  .tag-right, .tag-yours{ margin-left:auto; font-size:11px; padding:2px 7px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .tag-right{ background:rgba(132,195,151,0.2); color:var(--mint); }
+  .tag-yours{ background:rgba(225,119,102,0.2); color:var(--coral); }
+
+  .id-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .id-input{ flex:1; min-width:200px; background:rgba(242,238,225,0.06); border:1.5px dashed var(--line); border-radius:9px; padding:12px 14px; font-size:15px; color:var(--chalk); font-family:inherit; }
+  .id-input:focus{ outline:2px solid var(--blue); border-style:solid; }
+  .id-input:disabled{ opacity:0.7; }
+  .btn{ font-family:"IBM Plex Sans", sans-serif; font-weight:600; font-size:14.5px; border:none; border-radius:9px; padding:12px 18px; cursor:pointer; background:var(--yellow); color:#2b220c; transition:transform .1s, filter .15s; }
+  .btn:hover{ filter:brightness(1.06); }
+  .btn:active{ transform:scale(0.98); }
+  .btn:disabled{ opacity:0.5; cursor:not-allowed; }
+  .btn-ghost{ background:transparent; border:1.5px solid var(--chalk-dim); color:var(--chalk); }
+  .btn-block{ width:100%; }
+
+  .feedback{ margin-top:18px; padding:14px 16px; border-radius:10px; border:1px solid var(--line); background:rgba(0,0,0,0.15); }
+  .feedback.correct{ border-color:rgba(132,195,151,0.5); }
+  .feedback.incorrect{ border-color:rgba(225,119,102,0.5); }
+  .feedback-head{ font-family:"Kalam",cursive; font-weight:700; font-size:18px; margin-bottom:6px; }
+  .feedback.correct .feedback-head{ color:var(--mint); }
+  .feedback.incorrect .feedback-head{ color:var(--coral); }
+  .feedback-body{ font-size:14px; line-height:1.5; color:var(--chalk-dim); }
+  .feedback-actions{ margin-top:14px; display:flex; justify-content:flex-end; }
+
+  .start-wrap, .results-wrap, .transition-wrap{ color:var(--chalk); }
+  .lede{ color:var(--chalk-dim); font-size:14.5px; line-height:1.6; margin:10px 0 20px; }
+  .part-list{ display:flex; flex-direction:column; gap:10px; margin:18px 0 22px; }
+  .part-row{ display:flex; align-items:center; justify-content:space-between; border:1px solid var(--line); border-radius:9px; padding:12px 14px; font-size:14.5px; }
+  .part-row .n{ color:var(--chalk-dim); font-size:13px; }
+  .toggle-row{ display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--chalk-dim); margin-bottom:22px; padding:10px 12px; border:1px dashed var(--line); border-radius:9px; }
+  .toggle-row input{ width:16px; height:16px; }
+
+  .transition-wrap{ text-align:center; padding:20px 0; }
+  .transition-score{ font-family:"Kalam",cursive; font-size:44px; margin:14px 0 4px; }
+  .transition-note{ color:var(--chalk-dim); font-size:14px; margin-bottom:26px; }
+
+  .results-top{ text-align:center; padding:6px 0 10px; }
+  .results-score{ font-family:"Kalam",cursive; font-size:52px; }
+  .results-sub{ color:var(--chalk-dim); font-size:14px; margin-top:2px; }
+
+  .stat-row{ display:flex; gap:10px; margin:22px 0; }
+  .stat-card{ flex:1; border:1px solid var(--line); border-radius:10px; padding:14px 12px; text-align:center; }
+  .stat-card .num{ font-family:"Kalam",cursive; font-size:26px; }
+  .stat-card .label{ font-size:12px; color:var(--chalk-dim); margin-top:2px; }
+
+  .review-title{ font-size:15px; margin:26px 0 10px; color:var(--chalk); font-weight:600; font-family:"IBM Plex Sans",sans-serif;}
+  .review-group-label{ font-size:12.5px; color:var(--blue); margin:16px 0 8px; font-weight:600; }
+  .review-item{ border-left:3px solid var(--line); padding:8px 12px; margin-bottom:6px; font-size:13.5px; border-radius:4px; background:rgba(0,0,0,0.12); }
+  .review-item.ok{ border-left-color:var(--mint); }
+  .review-item.bad{ border-left-color:var(--coral); }
+  .review-q{ color:var(--chalk); margin-bottom:4px; }
+  .review-meta{ color:var(--chalk-dim); font-size:12.5px; line-height:1.5; }
+  .review-meta b{ color:var(--chalk); font-weight:600; }
+  .review-tagline{ font-size:11px; color:var(--yellow); font-weight:600; margin-bottom:2px; }
+
+  .bottom-actions{ margin-top:26px; display:flex; gap:10px; }
+
+  @media (max-width:480px){
+    .board{ padding:20px 16px 16px; }
+    .headline{ font-size:22px; }
+    .stat-row{ flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="board" id="app"></div>
+  <div class="tray">
+    <div class="chalk-dot" style="background:var(--yellow)"></div>
+    <div class="chalk-dot" style="background:var(--mint)"></div>
+    <div class="chalk-dot" style="background:var(--coral)"></div>
+    <div class="chalk-dot" style="background:var(--blue)"></div>
+  </div>
+</div>
+
+<script>
+/* ===================== QUESTION DATA (Lesson 2.2: The New World Order) ===================== */
+/* tag: 'un' marks the UN-organs / Security Council emphasis items */
+/* MC choices are kept to 1-5 words each. */
+const MC = [
+// Section A — New World Order & International Organizations
+{tag:'gen', q:`The term "New World Order" is often used to refer to international relations that emerged after:`,
+ options:[`The French Revolution`,`World War I`,`World War II`,`The Cold War's end only`], correct:2,
+ exp:`The handout defines the New World Order as the international relations that emerged after WWII, defined by multilateralism with liberal internationalist principles under international law.`},
+{tag:'gen', q:`The New World Order is defined by multilateralism built on liberal internationalist principles under:`,
+ options:[`Regional trade agreements`,`International law`,`Military alliances only`,`Colonial charters`], correct:1,
+ exp:`Per the handout: multilateralism with liberal internationalist principles under international law.`},
+{tag:'gen', q:`Per the lecture discussion, what combination results in the "multilateralism" that defines the New World Order?`,
+ options:[`Colonialism and imperialism`,`Liberal internationalism and neoliberalism`,`Nationalism and protectionism`,`Socialism and isolationism`], correct:1,
+ exp:`Your notes state: liberal internationalism + neoliberalism in the economic system = multilateralism, which is what "New World Order" means.`},
+{tag:'gen', q:`According to Claudio and Abinales (2022, p. 41), as cited in the handout, an international organization refers to:`,
+ options:[`Any multinational company`,`Intergovernmental organizations of states`,`A foreign ministry`,`A private charity`], correct:1,
+ exp:`The handout's cited definition: international intergovernmental organizations or groups primarily made up of member-states.`},
+{tag:'gen', q:`Which of the following is NOT among the examples of international organizations given in the lecture notes?`,
+ options:[`ASEAN`,`European Union`,`NATO`,`Unilever`], correct:3,
+ exp:`Unilever is listed later as an example of a transnational corporation (TNC), not an international organization.`},
+{tag:'gen', q:`International organizations function "sui generis" rather than as an amalgamation of various state interests. According to the lesson, this is expressed through which three powers?`,
+ options:[`Taxation and enforcement power`,`Classification, definition, and diffusion`,`Veto and intervention power`,`Legislative and judicial power`], correct:1,
+ exp:`The handout lists power of classification, power of definition, and power of norm diffusion.`},
+// Section B — Unjust Trade Policies & Neoliberal SAPs
+{tag:'gen', q:`The Post-WWII General Agreement on Tariffs and Trade (GATT) became which organization in 1995?`,
+ options:[`IMF`,`World Bank`,`World Trade Organization (WTO)`,`United Nations`], correct:2,
+ exp:`GATT became the WTO in 1995, per the handout.`},
+{tag:'gen', q:`According to the lesson, international trade policies are most specifically described as dominated by wealthy countries, especially:`,
+ options:[`China`,`The USA`,`Russia`,`The European Union`], correct:1,
+ exp:`The handout notes trade policy is "dominated by wealthy countries, specifically the USA."`},
+{tag:'gen', q:`What is the stated goal of neoliberalism regarding national economies, according to the lecture?`,
+ options:[`Close off all economies`,`Open all countries' economies`,`Nationalize all industries`,`Eliminate international organizations`], correct:1,
+ exp:`Neoliberalism's goal, per the lecture, is to open up every country's economy — even when smaller economies aren't ready.`},
+{tag:'gen', q:`Which program, tied to WB-IMF austerity, is where national debts started for developing countries like the Philippines, according to the lecture?`,
+ options:[`Structural Adjustment Programme (SAP)`,`Marshall Plan`,`Green Revolution`,`Rice Tariffication Law`], correct:0,
+ exp:`Structural Adjustment Programmes (SAPs) are identified in the lecture as the starting point of national debt for countries like the Philippines.`},
+{tag:'gen', q:`Which example does the lecture give of an austerity measure tied to SAPs in the Philippines?`,
+ options:[`Privatizing NAWASA and Manila Water`,`Nationalization of the oil industry`,`Free college tuition`,`Land reform under Marcos`], correct:0,
+ exp:`The lecture cites the 1980s privatization of NAWASA and Manila Water as an austerity example.`},
+{tag:'gen', q:`Per the lecture's discussion of the Rice Tariffication Law, even though rice imports increased supply, prices kept rising instead of falling mainly because of:`,
+ options:[`A shortage of rice farmers`,`Smuggling and hoarding by traders`,`A ban on rice imports`,`Increased government subsidies for rice`], correct:1,
+ exp:`Opening the market without enough regulation invited manipulation — rice traders smuggled and hoarded supply, releasing it only when prices were high.`},
+{tag:'gen', q:`In the "Cycle of Neoliberal SAPs" discussed in the lecture, what typically follows the deregulation, privatization, and liberalization of agricultural production and trade?`,
+ options:[`Immediate industrialization of agriculture`,`Growth of cheap service labor`,`A ban on food imports`,`Full agricultural self-sufficiency`], correct:1,
+ exp:`The lecture's cycle shows the service sector growing over agriculture, with graduates becoming cheap labor rather than the country investing in industrialized agriculture.`},
+{tag:'gen', q:`According to the lecture, what happens to local farmers as a result of these neoliberal trade dynamics?`,
+ options:[`Higher prices for produce`,`Selling low just to breakeven`,`Full government price guarantees`,`They stop farming entirely`], correct:1,
+ exp:`Local farmers end up selling at low prices just to break even, squeezed by the same market dynamics that let traders profit from hoarding.`},
+// Section C — TNCs
+{tag:'gen', q:`According to the handout, Transnational Corporations (TNCs) are best described as:`,
+ options:[`Victims of WB-IMF austerity programs`,`Beneficiaries of WB-IMF austerity SAPs`,`Government agencies that regulate trade`,`Non-governmental human rights organizations`], correct:1,
+ exp:`The handout describes TNCs as beneficiaries, not victims, of WB-IMF austerity SAPs.`},
+{tag:'gen', q:`Which of the following is given as an example of a TNC in the lecture notes?`,
+ options:[`ASEAN`,`Unilever`,`WTO`,`UN Security Council`], correct:1,
+ exp:`Unilever, along with Nestlé, P&G, Shell, and Accenture, is listed as an example of a TNC.`},
+{tag:'gen', q:`Beyond austerity programs, TNCs are also connected to further neoliberal policies affecting which areas, according to the lesson?`,
+ options:[`Labor, social welfare, and education`,`Military spending and defense`,`Religious institutions`,`Space exploration`], correct:0,
+ exp:`The handout specifies labor, social welfare, and education as areas further shaped by neoliberal policy pushed alongside TNCs.`},
+// Section D — Globalization of Poverty
+{tag:'gen', q:`Michel Chossudovsky is described in the lesson as a scholar who argued that the New World Order, dominated by organizations like IMF-WB and WTO, has contributed to economic struggles such as:`,
+ options:[`1997 and 2008 financial crises`,`World War I and II`,`The Cold War`,`Fall of Berlin Wall`], correct:0,
+ exp:`The Asian Financial Crisis of 1997 and the Global Financial Crisis of 2007-2008 are the examples the handout links to New World Order-driven economic struggles.`},
+{tag:'gen', q:`Which book by Michel Chossudovsky is referenced in the lecture as the source of his critique of neoliberalism?`,
+ options:[`Capital in the Twenty-First Century`,`Globalization of Poverty`,`The Shock Doctrine`,`The Wretched of the Earth`], correct:1,
+ exp:`"The Globalization of Poverty and the New World Order" is the book cited in the lecture notes.`},
+{tag:'gen', q:`Walden Bello, a Filipino professor of Sociology and activist, argued that the contemporary political economy is still dominated by the US through the so-called "Three Pillars" of the global economic order. These three pillars are:`,
+ options:[`UN, ICC, and NATO`,`GATT, ASEAN, and the EU`,`World Bank, IMF, and WTO`,`IMF, TNCs, and SAPs`], correct:2,
+ exp:`Bello's "Three Pillars" are the World Bank, IMF, and WTO.`},
+// Section E — UN Organs & Security Council (emphasis, 15 items)
+{tag:'un', q:`According to the lesson, the United Nations was established primarily to:`,
+ options:[`Promote free trade`,`Avoid another world war`,`Replace national governments`,`Manage global currency rates`], correct:1,
+ exp:`The handout states the UN was established to avoid another world war from breaking out.`},
+{tag:'un', q:`How many active organs does the lesson identify for the United Nations?`,
+ options:[`Three`,`Four`,`Five`,`Six`], correct:2,
+ exp:`The lesson lists five active organs of the UN.`},
+{tag:'un', q:`Which of the following is NOT one of the five active organs of the UN listed in the lesson?`,
+ options:[`General Assembly`,`Security Council`,`Trusteeship Council`,`International Court of Justice`], correct:2,
+ exp:`The five listed are General Assembly, Security Council, Economic and Social Council, International Court of Justice, and the Secretary-General — the Trusteeship Council is not among them.`},
+{tag:'un', q:`Which UN organ is described in the lesson as a "forum for multilateral negotiation" that makes recommendations to States on international issues within its competence?`,
+ options:[`Security Council`,`General Assembly`,`Secretary-General`,`International Court of Justice`], correct:1,
+ exp:`This description matches the General Assembly.`},
+{tag:'un', q:`Which UN organ is responsible for the maintenance of international peace and security?`,
+ options:[`Economic and Social Council`,`Security Council`,`General Assembly`,`International Court of Justice`], correct:1,
+ exp:`The Security Council holds this responsibility.`},
+{tag:'un', q:`How many total members does the UN Security Council have?`,
+ options:[`5`,`10`,`15`,`20`], correct:2,
+ exp:`The Security Council has 15 members with one vote each.`},
+{tag:'un', q:`Of the Security Council's 15 members, how many are non-permanent members serving two-year terms?`,
+ options:[`5`,`10`,`15`,`20`], correct:1,
+ exp:`10 non-permanent members serve two-year terms.`},
+{tag:'un', q:`How many permanent members does the UN Security Council have, and what distinguishes them?`,
+ options:[`10 members, elected yearly`,`5 members with veto power`,`15 members, all veto`,`3 members, chosen by SG`], correct:1,
+ exp:`5 permanent members hold veto powers.`},
+{tag:'un', q:`According to the lesson, the five permanent members of the UN Security Council are based on:`,
+ options:[`Largest economies today`,`Winners of World War II`,`Founding members of NATO`,`Countries with largest populations`], correct:1,
+ exp:`The lesson notes the P5 are based on the winners of WWII.`},
+{tag:'un', q:`Which of the following is NOT one of the five permanent members of the UN Security Council?`,
+ options:[`China`,`Japan`,`Russian Federation`,`The United Kingdom`], correct:1,
+ exp:`The five permanent members are China, France, Russian Federation, United Kingdom, and United States — Japan is not among them.`},
+{tag:'un', q:`Non-permanent members of the Security Council serve terms of:`,
+ options:[`1 year`,`2 years`,`3 years`,`4 years`], correct:1,
+ exp:`Non-permanent members are elected by the General Assembly to serve two-year terms.`},
+{tag:'un', q:`According to the lesson, all UN member-states must comply with decisions made by:`,
+ options:[`General Assembly only`,`The Security Council`,`ICJ decisions only`,`Regional organizations like ASEAN`], correct:1,
+ exp:`All UN member-states must comply with Security Council decisions.`},
+{tag:'un', q:`Non-permanent members of the Security Council are elected for two-year terms by which body?`,
+ options:[`The Secretary-General`,`The Security Council's permanent members`,`The General Assembly`,`The International Court of Justice`], correct:2,
+ exp:`Non-permanent members are elected by the General Assembly for two-year terms.`},
+{tag:'un', q:`According to a news example discussed in the lecture, the Philippines lost its bid for a UN Security Council non-permanent seat for the 2027-2028 term to which country?`,
+ options:[`Kyrgyzstan`,`Pakistan`,`Panama`,`Somalia`], correct:0,
+ exp:`The lecture cites the headline: "PH loses UN Security Council seat bid to Kyrgyzstan for 2027-2028 term."`},
+{tag:'un', q:`Besides the General Assembly and Security Council, which of the following IS one of the UN's five active organs named in the lesson?`,
+ options:[`The Trusteeship Council`,`The Economic and Social Council`,`The World Trade Organization`,`The World Bank`], correct:1,
+ exp:`The Economic and Social Council rounds out the five, along with the ICJ and the Secretary-General.`},
+// Section F — Sovereignty, Failures, Geopolitics, New Era
+{tag:'gen', q:`According to the lesson, issues on sovereignty and security arise partly because:`,
+ options:[`States are automatically bound`,`States can choose to join`,`UN has no member-states`,`Only P5 can join`], correct:1,
+ exp:`States choosing whether to join specific UN programs and agreements can affect how effectively those programs (e.g., on human rights) are carried out.`},
+{tag:'gen', q:`In the lead-up to the War on Iraq, which three countries were unconvinced by US claims and vetoed the UN resolution for intervention, according to the lecture?`,
+ options:[`Russia, China, and France`,`United Kingdom, Germany, and Japan`,`India, Brazil, and South Africa`,`Russia, China, and Germany`], correct:0,
+ exp:`Russia, China, and France vetoed the resolution, pushing the US to act through a "coalition of the willing" instead.`},
+{tag:'gen', q:`What did the US claim as justification to invade Iraq, which was later found to be unsubstantiated?`,
+ options:[`Weapons of mass destruction`,`Iraq attacked a US ally`,`Iraq refused to join UN`,`Iraq seized US oil assets`], correct:0,
+ exp:`No weapons of mass destruction were ultimately found in Iraq, despite this being the US's stated justification.`},
+{tag:'gen', q:`According to the lecture, what did the US do regarding a UN Security Council resolution demanding a permanent ceasefire in Gaza?`,
+ options:[`Passed it unanimously`,`Abstained without comment`,`Vetoed the resolution`,`Referred it to the ICJ`], correct:2,
+ exp:`The lecture cites the headline: "US vetoes Security Council resolution demanding permanent ceasefire in Gaza."`},
+{tag:'gen', q:`The lecture describes the contemporary US-China geopolitical rivalry as centered especially on:`,
+ options:[`Control of agricultural exports`,`AI dominance, Pax Silica`,`Ownership of Antarctic territory`,`Control of the ICJ`], correct:1,
+ exp:`The lecture frames the US-China "tug of war" as centered on AI dominance, using the term "Pax Silica."`},
+];
+
+const ID = [
+// Section A — one-word answers
+{tag:'gen', q:`What one-word term describes international relations where many states act together (not just one), central to the New World Order?`,
+ answers:[`multilateralism`], display:`Multilateralism`,
+ exp:`The New World Order is defined by multilateralism — many states cooperating under international law, rather than one state acting alone.`},
+{tag:'gen', q:`Fill in the blank: liberal internationalism + ___ in the economic system produces this multilateralism (one word).`,
+ answers:[`neoliberalism`], display:`Neoliberalism`,
+ exp:`Liberal internationalism plus neoliberalism in the economic system is what the lecture says produces the New World Order's multilateralism.`},
+{tag:'gen', q:`What international court (acronym) was established by the Rome Statute?`,
+ answers:[`icc`], display:`ICC`,
+ exp:`The Rome Statute established the International Criminal Court (ICC), cited as an example of an organization's "sui generis" powers.`},
+{tag:'gen', q:`Name one international organization (acronym or short name) mentioned as an example, besides the UN.`,
+ answers:[`asean`,`nato`,`eu`,`wto`,`icc`], display:`ASEAN, NATO, EU, WTO, or ICC`,
+ exp:`ASEAN, the EU, and NATO are the examples given in the lecture notes; WTO and ICC are discussed elsewhere in the lesson.`},
+// Section B
+{tag:'gen', q:`This acronym replaced GATT in 1995.`,
+ answers:[`wto`], display:`WTO`,
+ exp:`GATT became the World Trade Organization (WTO) in 1995.`},
+{tag:'gen', q:`This acronym names the WB-IMF austerity program tied to the start of developing-country debt.`,
+ answers:[`sap`,`saps`], display:`SAP`,
+ exp:`Structural Adjustment Programmes (SAPs) are cited as where national debt began for countries like the Philippines.`},
+{tag:'gen', q:`The Rice Tariffication Law aimed to increase the supply of which commodity to lower its price (one word)?`,
+ answers:[`rice`], display:`Rice`,
+ exp:`The law increased rice imports to lower prices, but smuggling and hoarding kept prices high instead.`},
+{tag:'gen', q:`What one-word term describes the strict economic belt-tightening measures imposed under SAPs, such as utility privatization?`,
+ answers:[`austerity`], display:`Austerity`,
+ exp:`Austerity measures, like the 1980s privatization of NAWASA and Manila Water, were part of SAP-driven belt-tightening.`},
+{tag:'gen', q:`Name the water utility (one-word acronym) cited as privatized in the Philippines in the 1980s.`,
+ answers:[`nawasa`], display:`NAWASA`,
+ exp:`NAWASA, along with Manila Water, is cited as an example of 1980s water privatization tied to austerity.`},
+// Section C
+{tag:'gen', q:`This acronym refers to companies like Unilever, Nestlé, and Shell operating across many countries.`,
+ answers:[`tncs`,`tnc`], display:`TNCs`,
+ exp:`Transnational Corporations (TNCs) are beneficiaries of WB-IMF austerity SAPs.`},
+{tag:'gen', q:`Besides labor, TNC-linked neoliberal reforms also target which public service sector (one word)?`,
+ answers:[`education`,`welfare`], display:`Education or Welfare`,
+ exp:`The handout lists labor, social welfare, and education as areas shaped by these neoliberal policies.`},
+// Section D
+{tag:'gen', q:`Name the scholar (surname only) who wrote "The Globalization of Poverty and the New World Order."`,
+ answers:[`chossudovsky`], display:`Chossudovsky`,
+ exp:`Michel Chossudovsky is the scholar cited for this critique of neoliberal globalization.`},
+{tag:'gen', q:`Name the Filipino sociologist-activist (surname only) behind the "Three Pillars" critique.`,
+ answers:[`bello`], display:`Bello`,
+ exp:`Walden Bello argued the global economy is still dominated by the US through the WB, IMF, and WTO.`},
+{tag:'gen', q:`In what year did the Asian Financial Crisis, cited as a New World Order-driven crisis, occur?`,
+ answers:[`1997`], display:`1997`,
+ exp:`The Asian Financial Crisis of 1997 is one of two crises the lesson links to New World Order-driven struggles (the other is 2007-2008).`},
+// Section F
+{tag:'gen', q:`The 2021 UN resolution notably not supported by the US and Israel concerned the right to what (one word)?`,
+ answers:[`food`], display:`Food`,
+ exp:`The Right to Food resolution, adopted December 16, 2021, notably did not receive US or Israeli support.`},
+{tag:'gen', q:`Which weapons (acronym) did the US falsely claim Iraq possessed, used to justify invasion?`,
+ answers:[`wmd`,`wmds`], display:`WMD`,
+ exp:`No weapons of mass destruction (WMD) were ultimately found in Iraq.`},
+{tag:'gen', q:`Fill in the blank: the US-China AI dominance rivalry is nicknamed "Pax ___."`,
+ answers:[`silica`], display:`Silica`,
+ exp:`The lecture uses the term "Pax Silica" for this contemporary US-China geopolitical rivalry over AI.`},
+{tag:'gen', q:`Name one recent US trade action (one word) cited as a rejection of the post-WWII world order.`,
+ answers:[`tariffs`], display:`Tariffs`,
+ exp:`US tariffs, alongside undermining multilateralism, are cited as signs of the US rejecting the order it once built.`},
+{tag:'gen', q:`Name the location (one word) of the humanitarian crisis cited, alongside Iraq, as a UN failure to prevent conflict.`,
+ answers:[`gaza`], display:`Gaza`,
+ exp:`Gaza is listed alongside the War on Iraq as a failure to avoid devastating conflict.`},
+{tag:'gen', q:`The Philippines supplies roughly what percentage of Japan's banana imports?`,
+ answers:[`80%`,`80`,`eighty`], display:`80%`,
+ exp:`Roughly 80% — a trade tie the lecture used to illustrate "banana = national security."`},
+// Section E — UN Organs & Security Council (emphasis, 10 items, acronym-style single-word answers)
+{tag:'un', q:`Name the UN organ (acronym) that is a forum for multilateral negotiation and makes recommendations to states.`,
+ answers:[`unga`,`ga`], display:`UNGA (General Assembly)`,
+ exp:`The General Assembly (UNGA) is this forum for multilateral negotiation.`},
+{tag:'un', q:`Name the UN organ (acronym) responsible for international peace and security, with 15 members.`,
+ answers:[`unsc`,`sc`], display:`UNSC (Security Council)`,
+ exp:`The Security Council (UNSC) has 15 members: 5 permanent and 10 non-permanent.`},
+{tag:'un', q:`Name the UN organ (one-word acronym) that handles economic and social matters.`,
+ answers:[`ecosoc`], display:`ECOSOC`,
+ exp:`ECOSOC is one of the five active organs listed in the lesson.`},
+{tag:'un', q:`Name the UN organ (acronym) that resolves legal disputes between states.`,
+ answers:[`icj`], display:`ICJ`,
+ exp:`The International Court of Justice (ICJ) is one of the five active organs.`},
+{tag:'un', q:`Name the office that leads the UN Secretariat and counts as one of the UN's five active organs.`,
+ answers:[`secretary-general`,`secretary general`,`secretarygeneral`,`sg`], display:`Secretary-General`,
+ exp:`The Secretary-General rounds out the UN's five active organs.`},
+{tag:'un', q:`How many permanent members does the UN Security Council have?`,
+ answers:[`5`,`five`], display:`5`,
+ exp:`There are 5 permanent members, each with veto power.`},
+{tag:'un', q:`How many non-permanent members does the UN Security Council have?`,
+ answers:[`10`,`ten`], display:`10`,
+ exp:`There are 10 non-permanent members, elected for two-year terms.`},
+{tag:'un', q:`Name one permanent member of the UN Security Council (country name or acronym).`,
+ answers:[`china`,`france`,`russia`,`uk`,`us`,`usa`], display:`China, France, Russia, UK, or US`,
+ exp:`The five permanent members are China, France, Russia, the UK, and the US.`},
+{tag:'un', q:`What single power do the 5 permanent members of the Security Council uniquely hold?`,
+ answers:[`veto`], display:`Veto`,
+ exp:`Only the five permanent members can veto Security Council resolutions.`},
+{tag:'un', q:`The Philippines lost its 2027-2028 Security Council seat bid to this country.`,
+ answers:[`kyrgyzstan`], display:`Kyrgyzstan`,
+ exp:`This is the headline cited in the lecture as an example of Security Council seat competition.`},
+];
+
+/* ===================== BUILD QUESTION SET ===================== */
+const ALL = [
+  ...MC.map((x,i)=>({ ...x, part:'mc', partLabel:'Part I: Multiple Choice', partShort:'Part I', numberInPart:i+1, totalInPart:MC.length })),
+  ...ID.map((x,i)=>({ ...x, part:'id', partLabel:'Part II: Identification', partShort:'Part II', numberInPart:i+1, totalInPart:ID.length })),
+];
+const TOTAL = ALL.length;                 // 70
+const MC_COUNT = MC.length, ID_COUNT = ID.length; // 40, 30
+const MC_END = MC_COUNT - 1;               // index 39
+const LAST = TOTAL - 1;                    // index 69
+const MC_TIME = 12;                        // seconds per Multiple Choice question (40 x 12s = 8 minutes)
+const ID_TIME = 15;                        // seconds per Identification question (30 x 15s = 7.5 minutes)
+function timeLimitFor(q){ return q.part==='mc' ? MC_TIME : ID_TIME; }
+
+/* ===================== STATE ===================== */
+function freshState(){
+  return {
+    screen:'start', currentIndex:0, answers:new Array(TOTAL).fill(null),
+    locked:false, timerEnabled:true, timeLeft:MC_TIME, timerId:null,
+  };
+}
+let state = freshState();
+
+/* ===================== HELPERS ===================== */
+function escapeHtml(str){
+  return (str||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function normalize(str){
+  let s = (str||'').toLowerCase().trim().replace(/\s+/g,' ').replace(/[.,;:!?]+$/,'');
+  s = s.replace(/^the\s+/, '');
+  return s;
+}
+function scoreForPart(part){
+  let correct=0;
+  ALL.forEach((q,i)=>{
+    if(q.part!==part) return;
+    const a = state.answers[i];
+    if(a && a.status==='correct') correct++;
+  });
+  const total = part==='mc'?MC_COUNT:ID_COUNT;
+  return {correct, total};
+}
+function scoreForTag(tag){
+  let correct=0, total=0;
+  ALL.forEach((q,i)=>{
+    if(q.tag!==tag) return;
+    total++;
+    const a = state.answers[i];
+    if(a && a.status==='correct') correct++;
+  });
+  return {correct, total};
+}
+function overallScore(){
+  let correct=0;
+  state.answers.forEach(a=>{ if(a && a.status==='correct') correct++; });
+  return {correct, total:TOTAL};
+}
+function pct(c,t){ return t? Math.round((c/t)*100) : 0; }
+
+/* ===================== TIMER ===================== */
+function startTimer(){
+  clearInterval(state.timerId);
+  const q = ALL[state.currentIndex];
+  state.timeLeft = timeLimitFor(q);
+  updateTimerDOM();
+  state.timerId = setInterval(tick, 1000);
+}
+function tick(){
+  state.timeLeft--;
+  updateTimerDOM();
+  if(state.timeLeft<=0){ clearInterval(state.timerId); handleTimeout(); }
+}
+function updateTimerDOM(){
+  const secEl = document.getElementById('timerSeconds');
+  const ring = document.getElementById('timerRingFg');
+  const q = ALL[state.currentIndex];
+  const max = timeLimitFor(q);
+  if(secEl) secEl.textContent = Math.max(state.timeLeft,0);
+  if(ring){
+    const circumference = 2*Math.PI*26;
+    const frac = Math.max(state.timeLeft,0)/max;
+    const threshold = Math.ceil(max/3);
+    ring.style.strokeDasharray = circumference;
+    ring.style.strokeDashoffset = circumference*(1-frac);
+    ring.style.stroke = state.timeLeft<=threshold ? 'var(--coral)' : 'var(--yellow)';
+  }
+}
+function handleTimeout(){
+  if(state.locked) return;
+  state.locked = true;
+  const q = ALL[state.currentIndex];
+  state.answers[state.currentIndex] = { status:'unanswered', part:q.part };
+  render();
+}
+
+/* ===================== ACTIONS ===================== */
+function startQuiz(){
+  const toggle = document.getElementById('timerToggle');
+  state.timerEnabled = toggle ? toggle.checked : true;
+  state.screen='quiz'; state.currentIndex=0; state.locked=false;
+  state.answers=new Array(TOTAL).fill(null);
+  render();
+  if(state.timerEnabled) startTimer();
+}
+function selectOption(i){
+  if(state.locked) return;
+  clearInterval(state.timerId);
+  state.locked=true;
+  const q = ALL[state.currentIndex];
+  const correct = i===q.correct;
+  state.answers[state.currentIndex] = { status: correct?'correct':'incorrect', userIndex:i, part:q.part };
+  render();
+}
+function submitIdentification(){
+  if(state.locked) return;
+  const input = document.getElementById('idInput');
+  if(!input) return;
+  const val = input.value;
+  clearInterval(state.timerId);
+  state.locked=true;
+  const q = ALL[state.currentIndex];
+  const trimmed = val.trim();
+  const norm = normalize(val);
+  const correct = trimmed!=='' && q.answers.some(a=>normalize(a)===norm);
+  state.answers[state.currentIndex] = { status: trimmed===''? 'unanswered' : (correct?'correct':'incorrect'), userText:val, part:q.part };
+  render();
+}
+function idKeydown(e){ if(e.key==='Enter'){ e.preventDefault(); submitIdentification(); } }
+function nextQuestion(){
+  const finished = state.currentIndex;
+  state.locked=false;
+  if(finished===MC_END){ state.screen='transition'; render(); return; }
+  if(finished===LAST){ state.screen='results'; render(); return; }
+  state.currentIndex++; state.screen='quiz'; render();
+  if(state.timerEnabled) startTimer();
+}
+function continueFromTransition(){
+  state.currentIndex++; state.screen='quiz'; state.locked=false; render();
+  if(state.timerEnabled) startTimer();
+}
+function confirmRestart(){
+  if(state.screen==='start') return;
+  if(window.confirm('Restart the quiz? Your current progress will be cleared.')) restartQuiz();
+}
+function restartQuiz(){ clearInterval(state.timerId); state = freshState(); render(); }
+
+/* ===================== RENDER ===================== */
+function render(){
+  const app = document.getElementById('app');
+  if(state.screen==='start') app.innerHTML = startScreen();
+  else if(state.screen==='quiz') app.innerHTML = quizScreen();
+  else if(state.screen==='transition') app.innerHTML = transitionScreen();
+  else app.innerHTML = resultsScreen();
+
+  if(state.screen==='quiz'){
+    updateTimerDOM();
+    if(!state.locked){
+      const q = ALL[state.currentIndex];
+      if(q.part==='id'){ const input = document.getElementById('idInput'); if(input) input.focus(); }
+    }
+  }
+}
+
+function startScreen(){
+  return `
+    <div class="start-wrap">
+      <div class="eyebrow"><span class="part-tag">GEED 003 · The Contemporary World</span><span>Lesson 2.2</span></div>
+      <h1 class="headline">Mock Quiz: The New World Order</h1>
+      <p class="lede">A practice run for Long Summative Quiz #2, built from your handout and lecture notes — including extra focus on the UN's five active organs and the Security Council's permanent members. Answer, and you'll immediately see whether you got it right, with a short explanation. At the end you'll get a full breakdown of every item so you know exactly what to review.</p>
+      <div class="part-list">
+        <div class="part-row"><span>Part I — Multiple Choice</span><span class="n">${MC_COUNT} items · ${MC_TIME}s each (~8 min)</span></div>
+        <div class="part-row"><span>Part II — Identification (type your answer)</span><span class="n">${ID_COUNT} items · ${ID_TIME}s each (~7.5 min)</span></div>
+      </div>
+      <p class="lede" style="margin-top:-10px;font-size:13px;">Of these, 15 MC + 10 identification items focus specifically on the UN's active organs and the Security Council's permanent members, as advised. Identification answers are designed to be one word (often an acronym) each.</p>
+      <div class="toggle-row">
+        <input type="checkbox" id="timerToggle" checked>
+        <label for="timerToggle">Time me — ${MC_TIME}s per MC question, ${ID_TIME}s per identification question, just like the real quiz (uncheck for untimed practice)</label>
+      </div>
+      <button class="btn btn-block" onclick="startQuiz()">Start Quiz</button>
+    </div>
+  `;
+}
+
+function timerWidget(){
+  if(!state.timerEnabled || state.locked) return '';
+  const q = ALL[state.currentIndex];
+  const max = timeLimitFor(q);
+  return `
+    <div class="timer-row">
+      <div class="timer-wrap">
+        <span>Time left</span>
+        <svg width="30" height="30" viewBox="0 0 60 60" class="timer-ring-svg">
+          <circle class="timer-ring-bg" cx="30" cy="30" r="26"></circle>
+          <circle id="timerRingFg" class="timer-ring-fg" cx="30" cy="30" r="26"></circle>
+          <text x="30" y="34" text-anchor="middle" transform="rotate(90 30 30)" class="timer-num" id="timerSeconds">${max}</text>
+        </svg>
+      </div>
+    </div>
+  `;
+}
+
+function quizScreen(){
+  const q = ALL[state.currentIndex];
+  const a = state.answers[state.currentIndex];
+  const overallPct = Math.round((state.currentIndex/TOTAL)*100);
+
+  let optionsHtml = '';
+  if(q.part==='id'){
+    optionsHtml = `
+      <div class="id-row">
+        <input type="text" id="idInput" class="id-input" placeholder="Type your one-word answer…"
+          ${state.locked?'disabled':''} onkeydown="idKeydown(event)">
+        <button class="btn" ${state.locked?'disabled':''} onclick="submitIdentification()">Check answer</button>
+      </div>
+    `;
+  } else {
+    optionsHtml = `<div class="options-col">` + q.options.map((opt,i)=>{
+      const letter = String.fromCharCode(65+i);
+      let cls='opt'; let tag='';
+      if(state.locked){
+        cls += ' locked-opt';
+        if(a && a.userIndex===i && i===q.correct){ cls+=' opt-correct'; tag='<span class="tag-right">Your answer · Correct</span>'; }
+        else if(a && a.userIndex===i && i!==q.correct){ cls+=' opt-incorrect'; tag='<span class="tag-yours">Your answer</span>'; }
+        else if(i===q.correct){ cls+=' opt-reveal'; tag='<span class="tag-right">Correct answer</span>'; }
+      }
+      return `<div class="${cls}" ${state.locked?'':`onclick="selectOption(${i})"`}>
+        <span class="mark">${letter}</span><span>${escapeHtml(opt)}</span>${tag}
+      </div>`;
+    }).join('') + `</div>`;
+  }
+
+  let feedbackHtml = '';
+  if(state.locked){
+    const status = a.status;
+    const isCorrect = status==='correct';
+    const headText = status==='correct' ? 'Correct!' : (status==='unanswered' ? "Time's up!" : 'Not quite.');
+    let extraLine = '';
+    if(q.part==='id'){
+      const yourText = a.userText && a.userText.trim() ? escapeHtml(a.userText) : '(no answer)';
+      extraLine = `<div style="margin-bottom:6px;"><b style="color:var(--chalk)">Your answer:</b> ${yourText} &nbsp;·&nbsp; <b style="color:var(--chalk)">Correct answer:</b> ${escapeHtml(q.display)}</div>`;
+    }
+    feedbackHtml = `
+      <div class="feedback ${isCorrect?'correct':'incorrect'}">
+        <div class="feedback-head">${headText}</div>
+        <div class="feedback-body">${extraLine}${escapeHtml(q.exp)}</div>
+        <div class="feedback-actions">
+          <button class="btn" onclick="nextQuestion()">${state.currentIndex===LAST ? 'See my results' : 'Next question'}</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const unTagNote = q.tag==='un' ? `<div class="review-tagline" style="margin-bottom:6px;">★ UN organs / Security Council focus</div>` : '';
+
+  return `
+    <div class="eyebrow">
+      <span><span class="part-tag">${q.partLabel}</span> · Question ${q.numberInPart} of ${q.totalInPart}</span>
+      <button class="restart-link" onclick="confirmRestart()">↺ Restart</button>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${overallPct}%"></div></div>
+    ${timerWidget()}
+    ${unTagNote}
+    <div class="prompt">${escapeHtml(q.q)}</div>
+    ${optionsHtml}
+    ${feedbackHtml}
+  `;
+}
+
+function transitionScreen(){
+  const {correct, total} = scoreForPart('mc');
+  const p = pct(correct,total);
+  let note;
+  if(p>=80) note = "Strong work — that's a solid grasp of Part I.";
+  else if(p>=60) note = "Decent run. Skim the review at the end to tighten up the weak spots.";
+  else note = "This part needs another pass — keep going, the full review at the end will show you exactly what to revisit.";
+
+  return `
+    <div class="transition-wrap">
+      <div class="eyebrow" style="justify-content:center;"><span class="part-tag">Part I: Multiple Choice complete</span></div>
+      <div class="transition-score">${correct} / ${total}</div>
+      <div class="transition-note">${p}% correct — ${note}</div>
+      <button class="btn" onclick="continueFromTransition()">Continue to Part II: Identification →</button>
+    </div>
+  `;
+}
+
+function reviewGroup(part, label){
+  const items = ALL.map((q,i)=>({q,i})).filter(o=>o.q.part===part);
+  const rows = items.map(({q,i})=>{
+    const a = state.answers[i];
+    const ok = a && a.status==='correct';
+    let yourAns, correctAns;
+    if(q.part==='id'){
+      yourAns = (a && a.userText && a.userText.trim()) ? a.userText : '(no answer)';
+      correctAns = q.display;
+    } else {
+      yourAns = (a && typeof a.userIndex==='number') ? q.options[a.userIndex] : '(no answer)';
+      correctAns = q.options[q.correct];
+    }
+    const star = q.tag==='un' ? '★ ' : '';
+    return `
+      <div class="review-item ${ok?'ok':'bad'}">
+        <div class="review-q">${star}${q.numberInPart}. ${escapeHtml(q.q)}</div>
+        <div class="review-meta">${ok?'✓':'✗'} <b>Your answer:</b> ${escapeHtml(yourAns)}${ok?'':`  ·  <b>Correct:</b> ${escapeHtml(correctAns)}`}</div>
+      </div>
+    `;
+  }).join('');
+  return `<div class="review-group-label">${label}</div>${rows}`;
+}
+
+function resultsScreen(){
+  const overall = overallScore();
+  const mc = scoreForPart('mc'), id = scoreForPart('id');
+  const un = scoreForTag('un');
+  return `
+    <div class="results-wrap">
+      <div class="results-top">
+        <div class="eyebrow" style="justify-content:center;"><span class="part-tag">Mock quiz complete</span></div>
+        <div class="results-score">${overall.correct} / ${overall.total}</div>
+        <div class="results-sub">${pct(overall.correct,overall.total)}% overall</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="num">${mc.correct}/${mc.total}</div><div class="label">Part I · MC</div></div>
+        <div class="stat-card"><div class="num">${id.correct}/${id.total}</div><div class="label">Part II · ID</div></div>
+        <div class="stat-card"><div class="num">${un.correct}/${un.total}</div><div class="label">★ UN / Security Council</div></div>
+      </div>
+      <button class="btn btn-block" onclick="restartQuiz()">Restart quiz</button>
+      <div class="review-title">Review your answers</div>
+      ${reviewGroup('mc','Part I — Multiple Choice')}
+      ${reviewGroup('id','Part II — Identification')}
+      <div class="bottom-actions">
+        <button class="btn btn-ghost btn-block" onclick="restartQuiz()">↺ Restart quiz</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ===================== INIT ===================== */
+render();
+</script>
+</body>
+</html>
+>>>>>>> b02d47366da7b9f37c3a4c3a19cf6113eb129caa
