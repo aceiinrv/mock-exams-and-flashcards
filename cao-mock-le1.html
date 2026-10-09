@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Computer Architecture & Organization: 100-Item Mock Exam</title>
+<style>
+:root{--bg:#eef1f7;--c:#fff;--t:#14213d;--m:#5d6b86;--b:#cfd6e4;--p:#2b59c3;--ok:#15803d;--okb:#dcfce7;--no:#b91c1c;--nob:#fee2e2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1424;--c:#18213a;--t:#e8edfa;--m:#9fb0d3;--b:#2c3a5e;--p:#7aa2ff;--ok:#4ade80;--okb:#12351f;--no:#f87171;--nob:#3b1717}}
+:root[data-theme="dark"]{--bg:#0e1424;--c:#18213a;--t:#e8edfa;--m:#9fb0d3;--b:#2c3a5e;--p:#7aa2ff;--ok:#4ade80;--okb:#12351f;--no:#f87171;--nob:#3b1717}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--t);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:700px;margin:0 auto;padding:16px}
+h1{font:700 20px Georgia,serif;margin:0}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+#st{color:var(--m);font-size:14px;white-space:nowrap}
+.ctl{display:flex;gap:8px;margin:12px 0}
+.chip,.rs{border:1.5px solid var(--b);border-radius:20px;padding:6px 14px;font:inherit;font-size:14px;background:var(--c);color:var(--t);cursor:pointer}
+.chip:has(input:checked){border-color:var(--p);background:var(--p);color:var(--bg)}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip:has(input:focus-visible),.rs:focus-visible,.o:focus-visible,.p:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.bar{height:6px;background:var(--b);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--p);transition:width .3s}
+.card{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:18px;margin-top:14px}
+.tag{font-size:13px;color:var(--p);font-weight:600}
+.n{font-size:13px;color:var(--m)}
+h2{font:600 19px/1.4 Georgia,serif;margin:8px 0 6px}
+.o{display:block;width:100%;text-align:left;margin-top:10px;padding:12px 14px;border:1.5px solid var(--b);border-radius:10px;background:var(--c);color:var(--t);font:inherit;cursor:pointer}
+.o:hover:not(:disabled){border-color:var(--p)}
+.o:disabled{cursor:default;opacity:1}
+.o.ok{border-color:var(--ok);background:var(--okb)}.o.no{border-color:var(--no);background:var(--nob)}
+.fb{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:15px}
+.fb.ok{background:var(--okb)}.fb.no{background:var(--nob)}
+.p{background:var(--p);color:var(--bg);border:0;border-radius:10px;padding:10px 18px;font:inherit;font-weight:600;cursor:pointer;margin-top:14px}
+.big{font:700 38px Georgia,serif;margin:6px 0}
+.row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--b);font-size:15px}
+</style></head><body><div class="w">
+<div class="top"><h1>CAO Mock Exam (100 items)</h1><span id="st"></span></div>
+<div class="ctl"><label class="chip"><input type="checkbox" id="sh"> Shuffle</label><button class="rs" id="rs">Restart</button></div>
+<div class="bar"><i id="bar"></i></div>
+<div class="card" id="main"></div>
+</div>
+<script>
+const TOP=["Number System","IC Manufacturing Process","SAP-1 Components","Assembly Language","Machine Language","Program Counter","Input and MAR","RAM"];
+// [topic, question, [correct, wrong, wrong, wrong], explanation]
+const Q=[
+[1,"How many different digits does the octal system use?",["8 (0–7)","7 (1–7)","10 (0–9)","16 (0–F)"],"Octal is base 8, so it uses digits 0 to 7."],
+[1,"Which digits does hexadecimal use?",["0–9 and A–F","0–7 and A–H","0–9 only","0–1 and A–F"],"Base 16 needs 16 symbols: 0–9 plus A–F (A = 10 … F = 15)."],
+[1,"The base of a number system tells you:",["How many digits it has and its place values","Only its largest digit","How many bits are in a byte","Whether the number is signed"],"Place values are powers of the base (decimal: 10³, 10², 10¹, 10⁰)."],
+[1,"In 4,321₁₀, the digit 3 has a place value of:",["10²","10³","10¹","10⁰"],"4,321 = 4×10³ + 3×10² + 2×10¹ + 1×10⁰."],
+[1,"101101₂ = ?₈",["55","45","26","65"],"Group bits by 3 from the right: 101 | 101 = 5 | 5."],
+[1,"101101₂ = ?₁₀",["45","54","35","41"],"Powers of 2 with a 1: 32 + 8 + 4 + 1 = 45."],
+[1,"101101₂ = ?₁₆",["2D","D2","B5","2B"],"Group by 4 (pad with zeros): 0010 | 1101 = 2 | D."],
+[1,"Binary-to-hexadecimal conversion groups the bits in:",["Fours, starting from the right","Threes, starting from the right","Twos, starting from the left","Eights, starting from the left"],"Each hex digit equals exactly 4 bits. Octal uses groups of 3."],
+[1,"55₈ = ?₂",["101101","110110","101011","011011"],"Each octal digit becomes 3 bits: 5 = 101, 5 = 101."],
+[1,"327₈ = ?₂",["11010111","10111011","11100111","11010011"],"3 = 011, 2 = 010, 7 = 111 → 011010111, which is 11010111 without the leading zero."],
+[1,"123₈ = ?₁₀",["83","123","66","91"],"1×8² + 2×8¹ + 3×8⁰ = 64 + 16 + 3 = 83."],
+[1,"55₈ = ?₁₆",["2D","55","2B","D2"],"Octal → binary → hex: 55₈ = 101101₂ = 0010 1101 = 2D."],
+[1,"What is the easiest way to convert octal to hexadecimal?",["Octal → binary → hexadecimal","Group the octal digits by 3","Divide by 8 repeatedly","Multiply each digit by 16"],"8 = 2³ and 16 = 2⁴, so there's no direct grouping; go through binary."],
+[1,"45₁₀ = ?₂",["101101","110101","101011","100111"],"Repeated ÷2 remainders, read bottom to top: 101101."],
+[1,"When converting decimal to another base by repeated division, the remainders are read:",["From bottom to top","From top to bottom","Largest to smallest","In any order"],"The last remainder is the most significant digit."],
+[1,"83₁₀ = ?₈",["123","321","143","113"],"83÷8 = 10 r3, 10÷8 = 1 r2, 1÷8 = 0 r1 → read upward: 123."],
+[1,"173₁₀ = ?₁₆",["AD","DA","BC","A3"],"173÷16 = 10 r13 (D), 10÷16 = 0 r10 (A) → read upward: AD."],
+[1,"2D₁₆ = ?₂",["101101","110100","1011010","100111"],"2 = 0010 and D = 1101 → 00101101, or 101101 without leading zeros."],
+[1,"2D₁₆ = ?₁₀",["45","27","58","213"],"2×16 + 13×1 = 45 (D = 13)."],
+[1,"The hexadecimal digit F equals what decimal value?",["15","16","14","10"],"A = 10, B = 11, C = 12, D = 13, E = 14, F = 15."],
+[1,"0101 1011₂ (the ACC value in the lecture program) = ?₁₆",["5B","58","B5","4B"],"0101 = 5 and 1011 = B → 5B₁₆ = 91₁₀. (The notes' '58h' is a typo for 5Bh.)"],
+[1,"How many direct conversions are in the lecture's conversion map of the four systems?",["12","6","8","16"],"4 systems × 3 targets each = 12 direct conversions."],
+[1,"7E₁₆ = ?₁₀",["126","112","142","119"],"7×16 + 14 = 126 (E = 14). In binary: 0111 1110."],
+[1,"A1₁₆ = ?₁₀",["161","171","151","110"],"10×16 + 1 = 161. This is the lecture's 91 + 70 = A1h."],
+[2,"A microprocessor is a digital component with miniaturized transistors on a single:",["Semiconductor integrated circuit (IC)","Magnetic disk","Printed paper circuit","Vacuum-tube array"],"It is also called a CPU or general-purpose microprocessor."],
+[2,"What is the main raw material of IC wafers?",["Purified silicon","Copper","Iron oxide","Plastic"],"Silicon is a semiconductor, refined to very high purity from sand."],
+[2,"The thin circular silicon slice on which chips are built is a:",["Wafer","Die","Ingot","Mask"],"A silicon ingot is sliced into wafers, and each wafer holds many chips."],
+[2,"A single chip cut out of a wafer is called a:",["Die","Ingot","Photoresist","Substrate"],"The wafer is diced into individual dies, which are then packaged."],
+[2,"Which step copies the circuit pattern onto the wafer using light and a mask?",["Photolithography","Dicing","Packaging","Ingot growth"],"Light through the mask exposes the photoresist, transferring the pattern."],
+[2,"The light-sensitive coating applied to the wafer during lithography is:",["Photoresist","Solder","Epoxy","Flux"],"Developing washes away part of the photoresist to reveal the pattern."],
+[2,"Removing unwanted material to carve the pattern into the wafer is:",["Etching","Doping","Dicing","Oxidation"],"Etching removes the material left exposed after lithography."],
+[2,"Adding impurities such as boron or phosphorus to silicon is called:",["Doping","Etching","Dicing","Masking"],"Doping creates p-type and n-type regions that form transistors."],
+[2,"Why are ICs fabricated in a cleanroom?",["Tiny dust particles can ruin microscopic circuits","Wafers must stay hot","Light destroys silicon","Air conducts electricity"],"A single particle can short or break features only nanometres wide."],
+[2,"Which is the correct general order of IC fabrication?",["Wafer processing → test → dice → package","Package → dice → wafer processing → test","Dice → lithography → package → wafer","Test → doping → package → wafer"],"Circuits are built on the whole wafer, tested, then cut apart and packaged."],
+[3,"SAP stands for:",["Simple-As-Possible","Single Address Processor","Standard Assembly Program","Serial Access Processor"],"SAP is a beginner-friendly computer that teaches core ideas without extra detail."],
+[3,"SAP-1 is based on which architecture?",["Von Neumann","Harvard","Pipelined","Vector"],"Instructions and data share the same memory."],
+[3,"How wide is the SAP-1 W bus?",["8 bits","4 bits","16 bits","12 bits"],"The 8-bit W bus carries data between registers."],
+[3,"Why are register outputs to the W bus three-state?",["So only one register drives the bus at a time","To save power","To make registers faster","To store extra bits"],"Three-state outputs allow orderly transfer of data over a shared bus."],
+[3,"Which register stores intermediate answers during a SAP-1 run?",["Accumulator (A)","B register","Instruction register","MAR"],"The accumulator also drives the adder-subtracter and can put its word on the W bus."],
+[3,"In SAP-1, the B register is used to:",["Hold the number added to or subtracted from A","Hold the next address","Hold the opcode","Drive the display"],"The addressed RAM word is loaded into B, then A + B or A − B is formed."],
+[3,"SAP-1's adder-subtracter handles subtraction using:",["2's complement","Sign-magnitude","BCD","Gray code"],"With SU high it computes A + B′, i.e. A − B."],
+[3,"When SU is high, the adder-subtracter output is:",["A − B","A + B","B − A","A AND B"],"SU low gives A + B; SU high gives A + B′ (2's complement)."],
+[3,"The SAP-1 adder-subtracter is asynchronous, meaning:",["It is unclocked and changes as soon as its inputs change","It uses a slower clock","It needs 6 T states","It only handles positive numbers"],"No clock is involved; EU puts its contents on the W bus."],
+[3,"The output register is loaded from the accumulator when:",["EA is high and LO is low (positive clock edge)","EU is high and LA is low","CE and LI are low","CP is high"],"EA puts A on the W bus and LO loads the output register."],
+[3,"The SAP-1 binary display shows:",["The contents of the output register","The program counter","The RAM contents","The B register"],"Eight LEDs, each connected to one flip-flop of the output port."],
+[3,"How many bits is the SAP-1 control word (CON)?",["12","8","16","6"],"CON = CP EP LM CE LI EI LA EA SU EU LB LO, carried on the 12-wire control bus."],
+[3,"How many T states does the SAP-1 ring counter produce per machine cycle?",["6","3","4","8"],"T1–T3 are the fetch cycle and T4–T6 are the execute cycle."],
+[3,"The ring counter word T6…T1 at the start of a run is:",["000001","100000","000000","111111"],"The single high bit then rotates through all six states."],
+[3,"The controller-sequencer:",["Produces the control word telling the computer what to do","Stores the program","Performs the addition","Displays the result"],"It sends one microinstruction (control word) per T state."],
+[3,"When do SAP-1 register transfers occur?",["On the positive clock edge, midway through a T state","On the negative edge only","Whenever CLK is high","Only during T1"],"Loading midway satisfies setup/hold times and lets bus transients settle."],
+[4,"LDA stands for:",["Load the accumulator","Load data address","Left-shift data accumulator","Link data array"],"LDA 8H means 'load the accumulator with the contents of memory location 8H'."],
+[4,"What does ADD 9H do?",["Loads RAM word 9H into B, then A = A + B","Adds the number 9 to A","Stores A at location 9H","Adds A and B into RAM"],"The addressed word goes to B, and the adder-subtracter sum replaces A."],
+[4,"If A = 0000 0111 and RC = 0000 0011, SUB CH leaves A =",["0000 0100","0000 1010","0000 0011","1111 1100"],"7 − 3 = 4 = 0000 0100."],
+[4,"Which SAP-1 instruction needs no memory address?",["OUT","LDA","ADD","SUB"],"OUT and HLT don't use memory data, so they are complete by themselves."],
+[4,"Which instructions are memory-reference instructions?",["LDA, ADD, SUB","OUT, HLT","LDA, OUT","ADD, HLT"],"They use data stored in memory; OUT and HLT do not."],
+[4,"HLT is used to:",["Stop processing and mark the end of the program","Clear the accumulator","Send A to the display","Load the B register"],"Without HLT you get 'computer trash' from runaway processing."],
+[4,"Mnemonics (LDA, ADD, SUB, OUT, HLT) are:",["Memory aids that remind you of the operation","Binary opcodes","Memory addresses","Data words"],"They are abbreviated instruction names used in assembly language."],
+[4,"A program written with mnemonics is called a:",["Source program","Object program","Op code","Operand"],"Source = mnemonics (assembly). Object = 0s and 1s (machine language)."],
+[4,"Example 10-1 loads 01H, adds 02H and 03H, then subtracts 04H. The display shows:",["0000 0010","0000 0110","0000 0100","0000 0001"],"1 + 2 + 3 = 6, then 6 − 4 = 2 = 0000 0010."],
+[4,"Lecture program: LDA 9h, ADD Ah, SUB Bh with 9h = 91, Ah = 70, Bh = 35 (decimal). The output is:",["126 (7Eh)","161 (A1h)","56 (38h)","196 (C4h)"],"91 + 70 = 161 (A1h), then 161 − 35 = 126 (7Eh)."],
+[4,"In 'ADD BH', what does BH represent?",["RAM address B (hexadecimal)","The B register","The binary number 11","Branch if high"],"BH = address 1011. The H only marks hexadecimal."],
+[4,"16 + 20 + 24 − 32 computed by SAP-1 gives (hex):",["1CH","2CH","14H","20H"],"16 + 20 + 24 = 60, minus 32 = 28 = 1CH = 0001 1100."],
+[5,"Machine language is made up of:",["Strings of 0s and 1s","Mnemonics","English words","Hexadecimal only"],"Assembly uses mnemonics; machine language uses binary."],
+[5,"The SAP-1 op code for LDA is:",["0000","0001","0010","1110"],"LDA 0000, ADD 0001, SUB 0010, OUT 1110, HLT 1111."],
+[5,"The SAP-1 op code for SUB is:",["0010","0001","1110","1111"],"SUB = 0010. ADD = 0001."],
+[5,"The SAP-1 op code for HLT is:",["1111","1110","0000","0010"],"HLT = 1111. OUT = 1110."],
+[5,"In a SAP-1 instruction, the four MSBs are the ___ and the four LSBs are the ___.",["Op code; address","Address; op code","Data; flags","Flags; op code"],"Upper nibble = instruction field (op code). Lower nibble = address field."],
+[5,"LDA FH in machine language is:",["0000 1111","1111 0000","0001 1111","0000 0000"],"LDA = 0000 and FH = 1111."],
+[5,"ADD EH in machine language is:",["0001 1110","0001 1111","0000 1110","1110 0001"],"ADD = 0001 and EH = 1110."],
+[5,"In HLT = 1111 XXXX, the XXXX bits are:",["Don't cares","Always 1111","The next address","The data to halt with"],"HLT isn't a memory-reference instruction, so the low nibble doesn't matter."],
+[5,"The lecture's memory word 0001 1010 at address 0001 is:",["ADD Ah","LDA Ah","SUB Ah","OUT Ah"],"0001 = ADD and 1010 = A."],
+[5,"SUB CH in hexadecimal shorthand (op code + address) is:",["2CH","C2H","0CH","1CH"],"SUB = 0010 = 2 and CH = C → 0010 1100 = 2CH."],
+[6,"The SAP-1 program counter counts from:",["0000 to 1111","0001 to 1111","0000 to 1110","0000 to 1000"],"A 4-bit counter reaches all 16 RAM addresses."],
+[6,"The program counter's job is to:",["Send the address of the next instruction to memory","Store the instruction","Decode the op code","Hold the arithmetic result"],"It keeps track of the next instruction to fetch."],
+[6,"Before each run, the program counter is reset to:",["0000","1111","0001","0100"],"A low CLR resets it, so the first instruction is fetched from address 0000."],
+[6,"Why is the program counter sometimes called a pointer?",["It points to the memory address of the next instruction","It points to the output port","It points to the B register","It points to the clock"],"Like a finger on a list: do this first, this second, and so on."],
+[6,"The SAP-1 program counter uses which chip for its three-state output?",["74LS126 (C3)","74LS173","74LS157","74189"],"C1 and C2 are 74LS107 JK flip-flops; C3 (74LS126) is the three-state buffer."],
+[6,"During which T state is the program counter incremented?",["T2 (increment state)","T1","T3","T4"],"In T2, CP is high and the PC counts on the clock edge."],
+[6,"In T1 (address state), the PC address reaches the MAR when:",["EP is high and LM is low","CP is high","CE is low","LI is low"],"EP puts the PC on the W bus and LM loads the MAR."],
+[6,"Why is the SAP-1 program stored in low memory and the data in high memory?",["The PC starts at 0000 and counts up through the program","RAM is faster at low addresses","Data can't use address 0000","It saves power"],"The PC points to 0000, then 0001, and so on, so the instructions must come first."],
+[7,"The input and MAR block contains:",["Address/data switch registers and the MAR","The ALU","The controller-sequencer","The output LEDs"],"The switch registers belong to the input unit; the MAR belongs to the memory."],
+[7,"The input switch registers let you send how many bits?",["4 address bits and 8 data bits","8 address bits and 4 data bits","4 and 4","8 and 8"],"Address switches are 4 bits and data switches are 8 bits."],
+[7,"MAR stands for:",["Memory Address Register","Main Arithmetic Register","Machine Address Routine","Memory Access Register"],"It holds the address being applied to the RAM."],
+[7,"During a run, the MAR gets its address from:",["The program counter","The accumulator","The output register","The B register"],"The PC address is latched into the MAR in the address state."],
+[7,"The MAR applies its 4-bit address to the:",["RAM","ALU","Output port","Clock"],"This is how a read operation on the RAM is performed."],
+[7,"The MAR chip (C4, 74LS173) has pins 1 and 2 grounded to give:",["A two-state output","A three-state output","An open-collector output","An inverted output"],"The MAR output doesn't go to the W bus, so no three-state output is needed."],
+[7,"The 74LS157 multiplexer (C5) with the RUN–PROG switch S2 selects between the:",["Address switch register and the MAR","Opcode and operand","A and B registers","Two clock signals"],"PROG selects the address switches; RUN selects the MAR."],
+[7,"The MAR loads the address on the W bus when:",["LM is low and a positive clock edge arrives","EP is low","CE is high","CP is high"],"LM is active low, and the load happens on the positive CLK edge."],
+[8,"The SAP-1 RAM is organized as:",["16 × 8","8 × 16","16 × 4","256 × 8"],"16 words of 8 bits each (a static TTL RAM)."],
+[8,"How many address bits does the SAP-1 RAM need?",["4","3","8","16"],"2⁴ = 16 memory locations."],
+[8,"The SAP-1 RAM is built from two 74189 chips, each a:",["16 × 4 static RAM","16 × 8 dynamic RAM","8 × 4 ROM","32 × 4 SRAM"],"C6 and C7 together give a 16 × 8 read-write memory."],
+[8,"To program the SAP-1 RAM, the RUN–PROG switch S2 is set to:",["PROG","RUN","START","MANUAL"],"PROG takes CE low and selects the address switches so you can write."],
+[8,"How is a word written into SAP-1 memory?",["Set the address and data switches, then push the write button","Press CLEAR","Set S6 to HIGH","Single-step the clock"],"A momentary push of the read-write switch (S4) takes WE low and loads the word."],
+[8,"During a computer run, the RAM receives its addresses from the:",["MAR","Data switches","Accumulator","Instruction register"],"The MAR supplies a 4-bit address and a read is performed."],
+[8,"During a run, a RAM word is placed on the W bus when:",["CE is low","CE is high","LI is high","CP is low"],"CE is active low and enables the RAM read."],
+[8,"Compared with DRAM, SRAM:",["Keeps its data without refresh while powered","Uses leaky capacitors","Is slower and cheaper","Is non-volatile"],"SRAM uses a six-transistor cell. DRAM must be refreshed every 10–100 ms."],
+[8,"DRAM must be refreshed because it stores each bit in a:",["Capacitor","Flip-flop","Diode","Fuse"],"Capacitors leak charge, so the data must be rewritten periodically."],
+[8,"RAM is best described as:",["Random-access, read-write memory","Read-only memory","Sequential-access memory","Auxiliary storage"],"Any location is reached in the same time, in any order."],
+[8,"In the lecture's SAP-1 memory, the data values (5Bh, 46h, 23h) are stored at:",["1001–1011","0000–0010","0011–0100","1111 only"],"The program sits at 0000–0100 and the data in high memory."],
+[8,"Unlike RAM, ROM is:",["Non-volatile and mostly read-only","Volatile","Refreshed every 10 ms","Always built from capacitors"],"ROM keeps its contents without power (for example the bootstrap loader)."]
+];
+const $=id=>document.getElementById(id);
+const sh=a=>{a=a.slice();for(let i=a.length;i>1;){const j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let ex,i,score,R,ans;
+function start(){
+  const S=$('sh').checked;
+  let L=Q.map((q,n)=>({n,m:q[0],q:q[1],c:q[2][0],d:q[2].slice(1),e:q[3]}));
+  if(S)L=sh(L);
+  L.forEach(x=>{if(S)x.o=sh([x.c,...x.d]);else{x.o=x.d.slice();x.o.splice((x.n*3+1)%4,0,x.c)}});
+  ex=L;i=0;score=0;R={};show();
+}
+function show(){
+  if(i>=ex.length)return done();
+  const q=ex[i];ans=0;
+  $('bar').style.width=i/ex.length*100+'%';
+  $('st').textContent='Score '+score+'/'+i;
+  $('main').innerHTML='<div class="tag">'+TOP[q.m-1]+'</div><div class="n">Question '+(i+1)+' of '+ex.length+'</div><h2>'+q.q+'</h2>'+
+    q.o.map((t,k)=>'<button class="o" data-k="'+k+'"><b>'+'ABCD'[k]+'.</b> '+t+'</button>').join('')+'<div id="fb"></div>';
+  window.scrollTo(0,0);
+}
+function done(){
+  $('bar').style.width='100%';
+  $('st').textContent='Score '+score+'/'+ex.length;
+  const p=Math.round(score/ex.length*100);
+  $('main').innerHTML='<h2>Exam complete</h2><div class="big">'+score+' / '+ex.length+' ('+p+'%)</div><p>'+
+    (p>=90?'Excellent work!':p>=75?'Good job. Review the topics you missed.':'Keep studying. Check the weaker topics below.')+'</p>'+
+    TOP.map((n,k)=>{const r=R[k+1]||[0,0];return '<div class="row"><span>'+n+'</span><b>'+r[0]+'/'+r[1]+'</b></div>'}).join('')+
+    '<button class="p" id="again">Restart exam</button>';
+  window.scrollTo(0,0);
+}
+$('main').onclick=e=>{
+  if(e.target.closest('#again'))return start();
+  if(e.target.closest('#nx')){i++;return show()}
+  const b=e.target.closest('.o');
+  if(!b||ans)return;ans=1;
+  const q=ex[i],pick=q.o[b.dataset.k],ok=pick===q.c;
+  (R[q.m]=R[q.m]||[0,0])[1]++;
+  if(ok){score++;R[q.m][0]++}
+  document.querySelectorAll('.o').forEach(x=>{x.disabled=true;if(q.o[x.dataset.k]===q.c)x.classList.add('ok')});
+  if(!ok)b.classList.add('no');
+  $('st').textContent='Score '+score+'/'+(i+1);
+  $('fb').innerHTML='<div class="fb '+(ok?'ok':'no')+'"><b>'+(ok?'✓ Correct!':'✗ Not quite.')+'</b> '+
+    (ok?'':'<b>'+pick+'</b> is incorrect. The right answer is <b>'+q.c+'</b>. ')+q.e+'</div>'+
+    '<button class="p" id="nx">'+(i+1<ex.length?'Next question':'See results')+'</button>';
+};
+$('sh').onchange=$('rs').onclick=start;
+start();
+</script></body></html>
