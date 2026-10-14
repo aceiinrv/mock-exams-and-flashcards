@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Solana Bombers Command Center</title>
+<style>
+:root{--bg:#fff;--fg:#0a0a0a;--mu:#3a3a3a;--bd:#0a0a0a;--ln:#c9c9c9;--ac:#0b3fd9;--ok:#066b2a;--okb:#d6f5df;--wa:#6b4200;--wab:#ffe9a8;--er:#a40019;--erb:#ffdce1;--gr:#4a4a4a;--grb:#e6e6e6;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#fff;--mu:#d6d6d6;--bd:#d9d9d9;--ln:#444;--ac:#9db8ff;--ok:#74eaa4;--okb:#0e3a22;--wa:#ffd166;--wab:#3b2b00;--er:#ff94a0;--erb:#4a0a14;--gr:#c4c4c4;--grb:#262626;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--fg:#fff;--mu:#d6d6d6;--bd:#d9d9d9;--ln:#444;--ac:#9db8ff;--ok:#74eaa4;--okb:#0e3a22;--wa:#ffd166;--wab:#3b2b00;--er:#ff94a0;--erb:#4a0a14;--gr:#c4c4c4;--grb:#262626;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+.top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:2px solid var(--bd)}
+h1{font-size:20px;margin:0}h2{font-size:17px;margin:22px 0 8px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px;border-bottom:1px solid var(--ln)}
+main{max-width:1100px;margin:0 auto;padding:16px}
+button,select,input,textarea{font:inherit;color:var(--fg);background:var(--bg);border:1.5px solid var(--bd);border-radius:6px;padding:6px 10px;max-width:100%}
+textarea{width:100%;min-height:170px;padding:10px}
+button{cursor:pointer;font-weight:600;white-space:nowrap}button:hover{background:var(--grb)}
+button.on,button.p{background:var(--fg);color:var(--bg)}
+input[type=number]{width:110px}input[type=checkbox]{width:18px;height:18px;padding:0}
+label{display:grid;gap:2px;font-size:12px;font-weight:600;color:var(--mu)}
+a{color:var(--ac);font-weight:600}summary{cursor:pointer;font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+.g{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.c{border:1.5px solid var(--bd);border-radius:8px;padding:12px}
+.l{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--mu)}
+.big{font-size:28px;font-weight:800;line-height:1.2}.s,.note{font-size:13px;color:var(--mu)}.s b{color:var(--fg)}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{border-bottom:1px solid var(--ln);padding:8px 6px;text-align:left;vertical-align:top;font-size:14px}
+th{font-size:12px;text-transform:uppercase;color:var(--mu)}.r{text-align:right}
+tr.grn td:first-child{border-left:6px solid var(--ok)}tr.yel td:first-child{border-left:6px solid var(--wa)}tr.red td:first-child{border-left:6px solid var(--er)}tr.gry td:first-child{border-left:6px solid var(--gr)}
+.b{display:inline-block;border:1.5px solid currentColor;border-radius:99px;padding:0 9px;font-size:12px;font-weight:700}
+.b.grn{color:var(--ok)}.b.yel{color:var(--wa)}.b.red{color:var(--er)}.b.gry{color:var(--gr)}
+.bar{height:16px;border:1.5px solid var(--bd);border-radius:99px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--ok)}
+.warn{border:1.5px solid var(--er);background:var(--erb);border-radius:8px;padding:8px 10px;margin:10px 0}
+#toasts{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;max-width:min(360px,calc(100vw - 24px));z-index:9}
+.t{background:var(--fg);color:var(--bg);padding:10px 12px;border-radius:8px}.t button{margin:6px 6px 0 0}
+pre{white-space:pre-wrap;font-size:13px}
+</style></head><body><div id="app"></div><div id="toasts"></div>
+<script>
+const $=s=>document.querySelector(s),
+N=(n,d=2)=>n==null||!isFinite(n)?'—':(+n).toLocaleString('en-US',{maximumFractionDigits:d}),
+P=n=>'₱'+N(n),U=(n,d=2)=>'$'+N(n,d),
+esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),
+fT=d=>new Date(d).toLocaleString([],{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}),
+dur=s=>{s=Math.max(0,Math.ceil(s));const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return(d?d+'d ':'')+(d||h?h+'h ':'')+m+'m '+s%60+'s'},
+uid=()=>Math.random().toString(36).slice(2,9),
+pb=s=>{const m=String(s).replace(/,/g,'').match(/\d*\.?\d+/);return m?parseFloat(m[0]):NaN};
+const MINT='CZiwA6eLUthZFLvTVEWG9v1K9Pc7p3eiBKRba2G7pump',POOL='7uQNr3qvET7GcVbA4bbpwevfaP4L3sttrJhxDugYgq41',K='sbcc-v1',LINK='https://www.geckoterminal.com/solana/pools/'+POOL,TABS=['Overview','Heroes & Alarms','Converter','Ledger','Settings'];
+const PERK={TH:['Treasure Hunter','+2 damage when a chest is hit'],JB:['Jail Breaker','+5 damage when a prison is hit'],PB:['Pierce Block','Explosion passes through blocks'],SB:['Save Battery','20% chance a bomb costs no energy'],FC:['Fast Charge','+0.5 energy/min while resting'],BM:['Bomb Pass','Walks through bombs'],BL:['Block Pass','Walks through destructible blocks']};
+const RAR=['Common','Rare','Super Rare','Epic','Legend','Super Legend'];
+const SEED=[['Moonbeam Cow','32046X',2,8,7,9,3,3,'TH JB BL',67],['Zen Lapis','32054X',1,6,5,5,2,2,'TH BM',77],['Rondo','32043X',0,3,1,3,1,1,'BL',46],['Rondo','32044X',0,2,1,2,1,1,'BL',31],['Sir Fudsworth','32045X',0,2,1,1,1,1,'JB',31],['Rondo','32047X',0,1,3,2,1,1,'BL',32],['Rondo','32053X',0,3,3,2,1,1,'FC',59],['Moonbeam Cow','32055X',0,3,3,3,1,1,'BL',72],['GM Toast','32056X',0,3,2,3,1,1,'BL',71],['Zen Lapis','32057X',0,1,3,2,1,1,'JB',32],['Laser Beanie','32064X',0,3,2,1,1,1,'BL',32],['Laser Beanie','32065X',0,3,1,1,1,1,'BM',31],['Rekt Rex','32066X',0,3,2,1,1,1,'BL',32],['GM Toast','32067X',0,3,1,3,1,1,'BL',70],['Rekt Rex','32068X',0,2,2,2,1,1,'FC',86]];
+const ORD=['32046','32054','32043','32044','32045','32047','32053','32055','32056','32057','32064','32065','32066','32067','32068'];
+const mk=a=>({u:uid(),n:a[0],id:a[1],r:a[2],lv:1,p:a[3],s:a[4],st:a[5],bn:a[6],br:a[7],pk:a[8].split(' ').filter(Boolean),e:a[9],t:Date.now(),status:'rest',tp:90,al:true,note:'',lw:0,fired:0,snz:0,arch:false});
+const def=()=>({px:{usd:.000432,sol:103.84,fx:62.861,t:'2026-10-15T18:46:00Z',ft:'2026-10-14T14:10:00Z',src:'GeckoTerminal snapshot',fsrc:'Pluang snapshot',mode:'snapshot',chg:39.33,rt:66382876.98},inv:10000,lead:5,bal:0,sort:'def',a:{fee:3,studio:.0025,net:.00001,dex:.25,min:1e5},heroes:SEED.map(a=>mk(a)),led:[],cash:[]});
+const load=()=>{try{return JSON.parse(localStorage.getItem(K))}catch(e){return null}},save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+let S=load()||def(),tab=0,ed=null,showA=false,lmsg='';
+const had=S.bal!=null;{const D=def();Object.keys(D).forEach(k=>{if(S[k]==null)S[k]=D[k]})}if(!had)S.bal=(S.chest||0)+(S.wal||0);
+/* core calculations */
+const maxE=st=>st*50,recMin=(st,e,r,pct)=>{const n=maxE(st)*pct/100-e;return n<=0?0:n/r},bd=(rem,nd)=>nd>0?rem/nd:null;
+const R=(inv,c)=>({rem:Math.max(0,inv-c),pct:inv>0?Math.min(100,c/inv*100):0});
+const cash=(A,o)=>{const fee=A*o.fee/100,sent=A-fee,t=sent*(1-o.dex/100),imp=o.rt>0?t/(o.rt+t):0,exe=t*o.price*(1-imp),fin=exe-(o.studio+o.net)*o.sol;return{fee,sent,fin,php:fin*o.fx}};
+const cashX=A=>cash(A,{price:S.px.usd,sol:S.px.sol,fx:S.px.fx,fee:S.a.fee,studio:S.a.studio,net:S.a.net,dex:S.a.dex,rt:S.px.rt});
+const roi=()=>{const c=S.cash.reduce((q,x)=>q+x.php,0);return{inv:S.inv,cash:c,...R(S.inv,c)}};
+/* heroes */
+const rate=h=>.5+(h.pk.includes('FC')?.5:0),
+ne=h=>h.status==='rest'?Math.min(maxE(h.st),h.e+rate(h)*(Date.now()-h.t)/6e4):h.e,
+secs=h=>recMin(h.st,ne(h),rate(h),h.tp)*60,
+stt=h=>{if(h.status!=='rest')return['gry','Working'];const s=secs(h);return s<=0?['grn','Ready']:s<=1800?['yel','Soon']:['red','Resting']},
+cdT=h=>h.status!=='rest'?'—':secs(h)<=0?'Ready now':dur(secs(h)),eaT=h=>h.status!=='rest'?'—':secs(h)<=0?'Now':fT(Date.now()+secs(h)*1000),
+hs=()=>{const L=S.heroes.filter(h=>!h.arch),w=L.filter(h=>h.status==='work').length,y=L.filter(h=>h.status==='rest'&&secs(h)<=0).length;return{w,y,r:L.length-w-y,n:L.length}},
+idx=h=>{const i=ORD.indexOf(String(h.id).replace(/\D/g,''));return i<0?99:i},
+SORT={def:(a,b)=>idx(a)-idx(b),eta:(a,b)=>(a.status==='rest'?secs(a):1e12)-(b.status==='rest'?secs(b):1e12),rar:(a,b)=>b.r-a.r||secs(a)-secs(b),name:(a,b)=>a.n.localeCompare(b.n)||a.id.localeCompare(b.id),pct:(a,b)=>ne(a)/maxE(a.st)-ne(b)/maxE(b.st)};
+/* ledger */
+function parseLed(txt){const rows=[];txt.split(/\r?\n/).forEach(l=>{const m=l.match(/(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s+(\d{1,2}):(\d{2}):(\d{2})\s*([AaPp][Mm])\s+(\S+)\s+(-?[\d,]*\.?\d+)\s*$/);if(!m)return;let h=+m[4]%12;if(/p/i.test(m[7]))h+=12;rows.push({t:new Date(+m[3],+m[1]-1,+m[2],h,+m[5],+m[6]).getTime(),y:m[8],a:parseFloat(m[9].replace(/,/g,''))})});return rows}
+const key=r=>r.t+'|'+r.y+'|'+r.a;
+function merge(rows){const old={};S.led.forEach(r=>{old[key(r)]=(old[key(r)]||0)+1});const seen={};let add=0;rows.forEach(r=>{const k=key(r);seen[k]=(seen[k]||0)+1;if(seen[k]>(old[k]||0)){S.led.push(r);add++}});S.led.sort((a,b)=>a.t-b.t);return add}
+function ls(){const L=S.led.filter(r=>r.a>0);if(!L.length)return null;const tot=L.reduce((s,r)=>s+r.a,0),d=Math.max(1,(L[L.length-1].t-L[0].t)/864e5);return{n:L.length,tot,t0:L[0].t,t1:L[L.length-1].t,days:d,perDay:tot/d,L}}
+const C=(l,v,s)=>`<div class=c><div class=l>${l}</div><div class=big>${v}</div><div class=s>${s||''}</div></div>`;
+const badge=()=>{const p=S.px,a=(Date.now()-Date.parse(p.t))/6e4;return p.mode==='live'&&a<5?['grn','LIVE']:p.mode==='manual'?['yel','YOUR PRICE']:['red','SNAPSHOT · NOT LIVE']};
+const pxForm=()=>`<details><summary>Update price (copy it from GeckoTerminal)</summary><div class=row style="margin-top:8px"><label>BOMBERS in USD<input id=m_usd type=text inputmode=decimal value="${N(S.px.usd,10)}" style="width:150px"></label><label>SOL in USD<input id=m_sol type=text inputmode=decimal value="${N(S.px.sol,4)}" style="width:110px"></label><label>₱ per $1<input id=m_fx type=text inputmode=decimal value="${N(S.px.fx,4)}" style="width:100px"></label><button class=p data-a=savePx>Save</button></div></details>`;
+/* views */
+function ov(){const p=S.px,r=roi(),h=hs(),l=ls(),[bc,bl]=badge(),net=cashX(1e5).php/1e5,nd=l?l.perDay*net:null,days=r.rem<=0?0:bd(r.rem,nd),td=new Date().toDateString(),today=S.led.filter(x=>x.a>0&&new Date(x.t).toDateString()===td).reduce((s,x)=>s+x.a,0),nx=S.heroes.filter(x=>!x.arch&&x.status==='rest'&&secs(x)>0).sort((a,b)=>secs(a)-secs(b))[0];
+return`<div class=c style="margin-bottom:10px"><div class=row style="justify-content:space-between"><div class=l>$BOMBERS price</div><span class="b ${bc}">${bl}</span></div>
+<div class=g style="margin-top:6px"><div><div class=big>${U(p.usd,8)}</div><div class=s>US dollars</div></div><div><div class=big>₱${N(p.usd*p.fx,4)}</div><div class=s>Philippine pesos</div></div><div><div class=big>${N(p.usd/p.sol,9)}</div><div class=s>SOL</div></div></div>
+<p class=s>As of ${fT(p.t)} (${esc(p.src)}) · 24h ${N(p.chg)}% · SOL ${U(p.sol)} · $1 = ₱${N(p.fx,2)}<br><a href="${LINK}" target="_blank" rel="noopener noreferrer">See the live price on GeckoTerminal ↗</a></p>${pxForm()}</div>
+<div class=g>
+${C('Your BOMBERS',N(S.bal,0),`≈ ${P(S.bal*p.usd*p.fx)} · ${U(S.bal*p.usd)}<br><button data-a=tab data-i=2>Change on Converter</button>`)}
+${C('Money recovered',P(r.cash)+' <span class=s>of '+P(r.inv)+'</span>',`<div class=bar><i style="width:${r.pct}%"></i></div>${N(r.pct,1)}% recovered · remaining <b>${P(r.rem)}</b>`)}
+${C('Days to break-even',r.rem<=0?'Done ✓':days==null?'—':days<1?'< 1 day':N(days,0)+' days',days==null?'Paste your reward ledger to get an estimate':`≈ ${P(nd)}/day after fees, from ${N(l.days,1)} day(s) of ledger`)}
+${C('Earned (ledger)',N(today,0)+' <span class=s>today</span>',l?`${N(l.perDay,0)} per day on average · ${N(l.tot,0)} total`:'Nothing pasted yet')}
+${C('Heroes',`${h.w} / ${h.r} / ${h.y}`,`working / resting / ready (of ${h.n})`+(nx?`<br>Next ready: ${esc(nx.n)} #${esc(nx.id)} in ${dur(secs(nx))}`:''))}
+</div>
+<details style="margin-top:12px"><summary>Add money you received (₱)</summary><div class=row style="margin:8px 0"><label>Amount in PHP<input id=ca type=text inputmode=decimal style="width:150px"></label><button class=p data-a=addCash>Add</button></div>${S.cash.length?`<table style="min-width:0">${S.cash.map((x,i)=>`<tr><td>${fT(x.t)}</td><td>${P(x.php)}</td><td><button data-a=delCash data-i=${i}>Delete</button></td></tr>`).join('')}</table>`:''}</details>`}
+const rowH=h=>{const[s,l]=stt(h),e=ne(h),m=maxE(h.st);return`<tr data-r="${h.u}" class="${s}"><td><b>${esc(h.n)}</b> #${esc(h.id)}<br><span class=note>${RAR[h.r]} · Lv${h.lv}/5 · P${h.p} S${h.s} St${h.st} B${h.bn}/R${h.br}</span><br><span class=note>${h.pk.map(k=>PERK[k][0]).join(', ')}</span>${h.note?`<br><span class=note>${esc(h.note)}</span>`:''}${h.lw?`<br><span class=note>last sent to work ${fT(h.lw)}</span>`:''}</td>
+<td><span class=en>${N(e,1)}</span>/${m} (<span class=pc>${N(e/m*100,0)}</span>%)<br><span class=note>estimate · recorded ${dur((Date.now()-h.t)/1000)} ago</span><div class=row style="margin-top:4px"><input type=number min=0 max=${m} id="e${h.u}" placeholder="energy"><button data-a=setE data-i="${h.u}">Set</button></div></td>
+<td>${N(rate(h),1)}/min</td>
+<td><input type=number min=1 max=100 value="${h.tp}" data-h=tp data-i="${h.u}" style="width:70px">%<br><span class=note>${N(m*h.tp/100,0)} energy</span></td>
+<td><b class=cd>${cdT(h)}</b><br><span class="b chip ${s}">${l}</span></td><td class=ea>${eaT(h)}</td>
+<td><label style="display:flex;gap:4px;align-items:center"><input type=checkbox data-h=al data-i="${h.u}" ${h.al?'checked':''}>alarm</label></td>
+<td><div class=row><button class=p data-a=work data-i="${h.u}">Sent to work</button><button data-a=edit data-i="${h.u}">Edit</button><button data-a=dup data-i="${h.u}">Dup</button><button data-a=arch data-i="${h.u}">${h.arch?'Restore':'Archive'}</button><button data-a=del data-i="${h.u}">Delete</button></div></td></tr>`};
+const form=()=>{const h=ed==='new'?{n:'',id:'',r:0,lv:1,p:1,s:1,st:1,bn:1,br:1,pk:[],e:50,note:''}:{...S.heroes.find(x=>x.u===ed)};if(ed!=='new')h.e=Math.round(ne(h));return`<div class=c style="margin:10px 0"><b>${ed==='new'?'Add hero':'Edit hero'}</b><div class=row>${[['n','Name','text'],['id','ID (e.g. 32046X)','text'],['lv','Level','number'],['p','Power','number'],['s','Speed','number'],['st','Stamina','number'],['bn','Bomb Num','number'],['br','Bomb Range','number'],['e','Energy now','number']].map(([k,l,t])=>`<label>${l}<input id="f_${k}" type=${t} value="${esc(h[k])}" style="width:${t==='text'?'150px':'84px'}"></label>`).join('')}<label>Rarity<select id=f_r>${RAR.map((x,i)=>`<option value=${i} ${i==h.r?'selected':''}>${x}</option>`).join('')}</select></label></div><div class=row style="margin:8px 0">${Object.keys(PERK).map(k=>`<label style="display:flex;gap:4px;align-items:center"><input type=checkbox id="p_${k}" ${h.pk.includes(k)?'checked':''}>${PERK[k][0]}</label>`).join('')}</div><label>Notes<input id=f_note value="${esc(h.note)}" style="width:100%"></label><div class=row style="margin-top:8px"><button class=p data-a=saveH>Save</button><button data-a=cancel>Cancel</button></div></div>`};
+function hv(){const L=S.heroes.filter(h=>showA||!h.arch).sort(SORT[S.sort]||SORT.def);
+return`${ed?form():''}<div class=row><label>Sort<select data-s=sort>${[['def','Default'],['eta','Earliest ready'],['rar','Rarity'],['pct','Lowest energy %'],['name','Name']].map(([k,l])=>`<option value=${k} ${k===S.sort?'selected':''}>${l}</option>`).join('')}</select></label><label style="display:flex;gap:6px;align-items:center"><input type=checkbox data-s=arch ${showA?'checked':''}>Show archived</label><button class=p data-a=add>Add hero</button><button data-a=notif>Enable notifications</button></div>
+<p class=note>"Default" keeps your fixed order, so rows never jump when you set an energy. Alarms ring only while this page is open (${S.lead} min before the target); use your phone's own alarm as the backup. This page cannot press Work in the game. Energy is an <b>estimate</b> from your last entry (0.5/min resting outside, +0.5 with Fast Charge).</p>
+<div class=tw><table><tr><th>Hero</th><th>Energy</th><th>Recovery</th><th>Target</th><th>Time left</th><th>Ready at</th><th>Alarm</th><th>Actions</th></tr>${L.map(rowH).join('')}</table></div>`}
+function cv(){return`<h2>How much are my $BOMBERS worth?</h2><label>Paste your BOMBERS balance from the game<input id=bal type=text inputmode=decimal placeholder="e.g. 12,345.67" value="${S.bal?N(S.bal,6):''}" style="width:100%;font-size:22px;padding:12px"></label><div id=res style="margin-top:12px"></div>
+<p class=note>Price used: ${U(S.px.usd,8)} per BOMBERS, $1 = ₱${N(S.px.fx,2)} (${S.px.mode==='live'?'live':S.px.mode==='manual'?'entered by you':'snapshot'} · ${fT(S.px.t)}). <a href="${LINK}" target="_blank" rel="noopener noreferrer">Check the live price ↗</a></p>${pxForm()}`}
+function conv(){const v=pb($('#bal').value)||0,p=S.px,c=cashX(v);S.bal=v;save();
+$('#res').innerHTML=`<div class=g><div class=c><div class=l>Philippine peso</div><div class=big>${P(v*p.usd*p.fx)}</div></div><div class=c><div class=l>US dollar</div><div class=big>${U(v*p.usd)}</div></div><div class=c><div class=l>SOL</div><div class=big>${N(v*p.usd/p.sol,4)}</div></div></div><p>${v>=S.a.min?`If you cash out and sell: about <b>${P(c.php)}</b> take-home after the ${S.a.fee}% game fee, SOL fees and swap costs (estimate; taxes not included).`:`Cashout needs at least ${N(S.a.min,0)} BOMBERS. You need ${N(S.a.min-v,0)} more.`}</p>`}
+function ledv(){const l=ls(),p=S.px,D={};
+const CH=[['Wooden chest',35.625],['Metal chest',81.25],['Gold chest',406.25],['Diamond chest',812.5]];
+let bk='',days='';if(l){l.L.forEach(r=>{const k=new Date(r.t).toDateString();(D[k]=D[k]||{t:r.t,n:0,s:0}).n++;D[k].s+=r.a});
+const rows=CH.map(([n,v])=>{const x=l.L.filter(r=>Math.abs(r.a-v)<.001);return[n,x.length,x.reduce((s,r)=>s+r.a,0)]}),o=l.L.filter(r=>!CH.some(c=>Math.abs(r.a-c[1])<.001));rows.push(['Other rewards',o.length,o.reduce((s,r)=>s+r.a,0)]);
+bk=`<h2>By chest type</h2><div class=tw><table style="min-width:0"><tr><th>Type</th><th class=r>Count</th><th class=r>BOMBERS</th></tr>${rows.map(x=>`<tr><td>${x[0]}</td><td class=r>${x[1]}</td><td class=r>${N(x[2],2)}</td></tr>`).join('')}</table></div>`;
+days=`<h2>Per day</h2><div class=tw><table style="min-width:0"><tr><th>Day</th><th class=r>Rewards</th><th class=r>BOMBERS</th><th class=r>≈ PHP</th></tr>${Object.values(D).sort((a,b)=>b.t-a.t).slice(0,14).map(x=>`<tr><td>${new Date(x.t).toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'})}</td><td class=r>${x.n}</td><td class=r>${N(x.s,2)}</td><td class=r>${P(x.s*p.usd*p.fx)}</td></tr>`).join('')}</table></div>`}
+return`<h2>Reward ledger</h2><textarea id=led placeholder="Paste the game's &quot;Reward ledger (last 100)&quot; here. Each line looks like:&#10;10/15/2026, 2:53:19 AM   hunt_chest   406.25"></textarea><div class=row style="margin-top:8px"><button class=p data-a=addLed>Add to ledger</button><button data-a=clrLed>Clear ledger</button></div>
+${lmsg?`<div class=${lmsg.includes('⚠')?'warn':'c'} style="margin-top:10px">${esc(lmsg)}</div>`:''}
+<p class=note>Paste as often as you like: rows already saved are skipped, so overlapping pastes never double-count (identical rows in the same second are kept). The game only shows the last 100 rows, so paste before more than 100 new rewards pile up or some will be missed.</p>
+${l?`<div class=g>${C('Total earned',N(l.tot,2),`≈ ${P(l.tot*p.usd*p.fx)} at today's price`)}${C('Average per day',N(l.perDay,0),`${N(l.days,1)} day(s) tracked (counts at least 1 day)`)}${C('Rewards saved',N(l.n,0),`${fT(l.t0)} to ${fT(l.t1)}`)}</div>${bk}${days}`:'<p>Nothing saved yet.</p>'}`}
+function sv(){return`<h2>Settings</h2><div class=row><label>Money invested (₱)<input type=number step=any data-b=inv value="${S.inv}"></label><label>Alarm warning (minutes before target)<input type=number data-b=lead value="${S.lead}"></label></div>
+<h2>Backup</h2><div class=row><button data-a=exp>Download backup</button><label>Restore a backup<input type=file accept=".json" data-s=restore></label><button data-a=reset>Erase everything</button></div><p class=note>Everything is saved in this browser only. This page never asks for seed phrases or signs transactions.</p>
+<h2>Checks</h2><button data-a=test>Run calculation tests</button><pre id=tr></pre>`}
+function render(){$('#app').innerHTML=`<div class=top><h1>Solana Bombers Command Center</h1><button data-a=theme>Light / Dark</button></div><nav>${TABS.map((t,i)=>`<button data-a=tab data-i=${i} class="${i==tab?'on':''}">${t}</button>`).join('')}</nav><main>${[ov,hv,cv,ledv,sv][tab]()}</main>`;if(tab===2)conv()}
+/* actions */
+const arm=(b,fn)=>{if(b.dataset.arm){fn();return}b.dataset.arm=1;const t=b.textContent;b.textContent='Confirm?';setTimeout(()=>{b.dataset.arm='';b.textContent=t},3000)};
+function toast(m,h){const d=document.createElement('div');d.className='t';d.textContent=m;if(h)d.insertAdjacentHTML('beforeend',`<div><button data-a=snz data-i="${h.u}">Snooze 10m</button><button data-a=work data-i="${h.u}">Sent to work</button><button data-a=dis>Dismiss</button></div>`);else setTimeout(()=>d.remove(),4500);$('#toasts').append(d)}
+function ring(h){const m=`${h.n} #${h.id} reached ${h.tp}%. Open the game and press Work.`;toast(m,h);try{if(Notification.permission==='granted')new Notification('Hero ready',{body:m})}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}try{const x=new(window.AudioContext||window.webkitAudioContext)(),o=x.createOscillator();o.connect(x.destination);o.start();setTimeout(()=>{o.stop();x.close()},250)}catch(e){}}
+async function dl(n,d){try{const D=window.claude&&await claude.use('downloads');if(!D)return toast('Downloads are unavailable in this view.');await D.save({filename:n,data:d})}catch(e){if(!e||e.code!=='declined')toast('Could not save file ('+((e&&e.code)||'error')+').')}}
+function saveH(){const g=k=>$('#f_'+k).value,n=k=>+g(k),d={n:g('n').trim(),id:g('id').trim(),r:n('r'),lv:n('lv'),p:n('p'),s:n('s'),st:n('st'),bn:n('bn'),br:n('br'),note:g('note'),pk:Object.keys(PERK).filter(k=>$('#p_'+k).checked)},e=n('e');
+if(!d.n||[d.lv,d.p,d.s,d.st,d.bn,d.br,e].some(x=>!isFinite(x)||x<0)||d.lv<1||d.lv>5||d.st<1||e>maxE(d.st))return toast('Check inputs: name required, level 1 to 5, stamina ≥ 1, energy 0 to max.');
+if(ed==='new')S.heroes.push({...mk([d.n,d.id,d.r,d.p,d.s,d.st,d.bn,d.br,'',e]),...d});else{const h=S.heroes.find(x=>x.u===ed),chg=$('#f_e').value!==$('#f_e').defaultValue;Object.assign(h,d);if(chg){h.e=e;h.t=Date.now();h.status='rest';h.fired=0}h.e=Math.min(h.e,maxE(h.st))}ed=null;save();render()}
+function addLed(){const rows=parseLed($('#led').value);if(!rows.length)return toast('No ledger rows found. Paste lines like: 10/15/2026, 2:53:19 AM  hunt_chest  406.25');
+const had=S.led.length,newest=had?S.led[had-1].t:0,gap=had&&rows.length>=100&&Math.min(...rows.map(r=>r.t))>newest,add=merge(rows);
+lmsg=`Read ${rows.length} rows: ${add} new, ${rows.length-add} already saved.`+(gap?' ⚠ Possible gap: this paste starts after your last saved row and shows a full 100 rows, so some rewards in between may be missing. Paste more often.':'');save();render()}
+function go(a,i,b){const h=i&&S.heroes.find(x=>x.u===i);switch(a){
+case'theme':{const c=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');S.theme=c==='dark'?'light':'dark';document.documentElement.dataset.theme=S.theme;save();break}
+case'tab':tab=+i;ed=null;render();scrollTo(0,0);break;
+case'dis':b.closest('.t').remove();break;
+case'snz':if(h){h.fired=0;h.snz=Date.now()+6e5;save()}b.closest('.t').remove();break;
+case'work':{if(!h)break;h.e=ne(h);h.t=Date.now();h.status='work';h.lw=Date.now();h.fired=0;save();const t=b.closest('.t');if(t)t.remove();render();break}
+case'setE':{const v=+$('#e'+i).value,m=maxE(h.st);if($('#e'+i).value===''||!(v>=0&&v<=m))return toast('Energy must be 0 to '+m);h.e=v;h.t=Date.now();h.status='rest';h.fired=0;save();render();break}
+case'edit':ed=i;render();scrollTo(0,0);break;
+case'add':ed='new';render();scrollTo(0,0);break;
+case'cancel':ed=null;render();break;
+case'saveH':saveH();break;
+case'dup':S.heroes.push({...JSON.parse(JSON.stringify(h)),u:uid(),n:h.n+' (copy)'});save();render();break;
+case'arch':h.arch=!h.arch;save();render();break;
+case'del':arm(b,()=>{S.heroes=S.heroes.filter(x=>x!==h);save();render()});break;
+case'notif':'Notification'in window?Notification.requestPermission().then(r=>toast('Browser notifications: '+r)):toast('Notifications are not supported here.');break;
+case'savePx':{const u=pb($('#m_usd').value),s=pb($('#m_sol').value),f=pb($('#m_fx').value);if(!(u>0&&s>0&&f>0))return toast('Enter positive numbers for all three prices.');Object.assign(S.px,{usd:u,sol:s,fx:f,mode:'manual',t:new Date().toISOString(),ft:new Date().toISOString(),src:'entered by you',fsrc:'entered by you'});save();render();break}
+case'addCash':{const v=pb($('#ca').value);if(!(v>0))return toast('Enter the pesos you received.');S.cash.push({t:Date.now(),php:v});save();render();break}
+case'delCash':arm(b,()=>{S.cash.splice(+i,1);save();render()});break;
+case'addLed':addLed();break;
+case'clrLed':arm(b,()=>{S.led=[];lmsg='';save();render()});break;
+case'exp':dl('bombers-backup.json',JSON.stringify(S,null,1));break;
+case'reset':arm(b,()=>{try{localStorage.removeItem(K)}catch(e){}S=def();save();render()});break;
+case'test':$('#tr').textContent=tests().join('\n');break}}
+function tests(){const T=[],ok=(n,c)=>T.push((c?'PASS  ':'FAIL  ')+n),c=cash(1e5,{price:1,sol:100,fx:60,fee:3,studio:.0025,net:0,dex:0,rt:0}),q=R(1e4,2500),L=parseLed('10/15/2026, 2:53:19 AM\thunt_chest\t406.25');
+ok('Max energy at 9 stamina = 450',maxE(9)===450);
+ok('55 energy at 0.5/min = 790 min to full',recMin(9,55,.5,100)===790);
+ok('90% target = 405 energy, 700 min from 55',maxE(9)*90/100===405&&recMin(9,55,.5,90)===700);
+ok('100,000 cashout = 3,000 fee, 97,000 sent',c.fee===3000&&c.sent===97000);
+ok('25% recovered, ₱7,500 left',q.pct===25&&q.rem===7500);
+ok('Ledger line parses (406.25)',L.length===1&&L[0].a===406.25);
+return T}
+async function refresh(){const p=S.px;try{const r=await fetch('https://api.geckoterminal.com/api/v2/networks/solana/pools/'+POOL);if(!r.ok)throw 0;const j=await r.json(),a=j.data.attributes;if(j.data.relationships.base_token.data.id!=='solana_'+MINT)throw 0;const u=+a.base_token_price_usd,s=+a.quote_token_price_usd;if(!(u>0&&s>0))throw 0;let fx=p.fx,ft=p.ft;try{const f=await(await fetch('https://open.er-api.com/v6/latest/USD')).json();if(f.rates&&f.rates.PHP>0){fx=f.rates.PHP;ft=new Date().toISOString()}}catch(e){}Object.assign(p,{usd:u,sol:s,fx,ft,t:new Date().toISOString(),mode:'live',src:'GeckoTerminal (mint verified)',chg:+a.price_change_percentage.h24});save();render()}catch(e){}}
+function tick(){const now=Date.now();S.heroes.forEach(h=>{if(h.arch)return;const r=tab===1&&document.querySelector('[data-r="'+h.u+'"]');if(r){const[s,l]=stt(h),e=ne(h),m=maxE(h.st);r.className=s;r.querySelector('.en').textContent=N(e,1);r.querySelector('.pc').textContent=N(e/m*100,0);r.querySelector('.cd').textContent=cdT(h);r.querySelector('.ea').textContent=eaT(h);const c=r.querySelector('.chip');c.className='b chip '+s;c.textContent=l}
+if(h.al&&h.status==='rest'&&h.fired!==h.t&&now>h.snz&&secs(h)<=S.lead*60){h.fired=h.t;save();ring(h)}})}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b){e.preventDefault();go(b.dataset.a,b.dataset.i,b)}});
+document.addEventListener('input',e=>{if(e.target.id==='bal')conv()});
+document.addEventListener('change',e=>{const t=e.target,d=t.dataset;
+if(d.b){const v=+t.value;if(t.value===''||!isFinite(v)||v<0)return toast('Enter a number ≥ 0.');S[d.b]=v;save();render()}
+else if(d.h){const h=S.heroes.find(x=>x.u===d.i);if(!h)return;if(d.h==='al')h.al=t.checked;else{const v=+t.value;if(!(v>=1&&v<=100)){toast('Target must be 1 to 100%.');return render()}h.tp=v}h.fired=0;save();render()}
+else if(d.s==='sort'){S.sort=t.value;save();render()}else if(d.s==='arch'){showA=t.checked;render()}
+else if(d.s==='restore'){const f=t.files[0];f&&f.text().then(x=>{const j=JSON.parse(x);if(!j||!Array.isArray(j.heroes)||!j.px)throw 0;S=j;save();location.reload()}).catch(()=>toast('Invalid backup file.'))}});
+if(S.theme)document.documentElement.dataset.theme=S.theme;
+render();setInterval(tick,1000);refresh();
+</script></body></html>
