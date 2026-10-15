@@ -134,14 +134,63 @@ function applyEn(){const L=[];$('#enp').value.split(/\r?\n/).forEach(l=>{const m
 if(!L.length)return toast('No heroes found. Use lines like: Rondo #32043 - 28');
 const now=Date.now(),bad=[];let ok=0;L.forEach(([id,v])=>{const h=S.heroes.find(x=>nid(x)===id);if(!h){bad.push('#'+id);return}h.e=Math.min(v,maxE(h.st));h.t=now;h.status='rest';h.fired=0;ok++});
 enmsg='Updated '+ok+' hero(es).'+(bad.length?' Not found: '+bad.join(', ')+'.':'');save();render()}
-const card=h=>{const[s,l]=stt(h),e=ne(h),m=maxE(h.st),pc=Math.min(100,e/m*100),pic=IMG[nid(h)],ini=h.n.split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
-return`<div class="hc r${h.r} s-${s}" data-r="${h.u}"><div class=hh><div class=pic>${pic?`<img src="${pic}" alt="${esc(h.n)}">`:`<span>${esc(ini)}</span>`}</div><div class=hm><div class=hn>${esc(h.n)} <span class=hid>#${esc(h.id)}</span></div><div class=row style="gap:6px;margin-top:6px;align-items:center"><span class=rp>${RAR[h.r]}</span><span class=lv>Lv ${h.lv}/5</span><span class="b chip ${s}">${l}</span></div></div></div>
-<div class=sts><span>💥 Power <b>${h.p}</b></span><span>👟 Speed <b>${h.s}</b></span><span>🔋 Stamina <b>${h.st}</b></span><span>💣 Bombs <b>${h.bn}</b></span><span>📏 Range <b>${h.br}</b></span></div>
+const card=h=>{
+const[s,l]=stt(h),e=ne(h),m=maxE(h.st),pc=Math.min(100,e/m*100),
+pic='solbom_image/'+h.n+' %23'+nid(h)+'.png',
+ini=h.n.split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+return`<div class="hc r${h.r} s-${s}" data-r="${h.u}">
+<div class=hh>
+<div class=pic>
+<img src="${pic}" alt="${esc(h.n)}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+<span style="display:none">${esc(ini)}</span>
+</div>
+<div class=hm>
+<div class=hn>${esc(h.n)} <span class=hid>#${esc(h.id)}</span></div>
+<div class=row style="gap:6px;margin-top:6px;align-items:center">
+<span class=rp>${RAR[h.r]}</span>
+<span class=lv>Lv ${h.lv}/5</span>
+<span class="b chip ${s}">${l}</span>
+</div>
+</div>
+</div>
+<div class=sts>
+<span>💥 Power <b>${h.p}</b></span>
+<span>👟 Speed <b>${h.s}</b></span>
+<span>🔋 Stamina <b>${h.st}</b></span>
+<span>💣 Bombs <b>${h.bn}</b></span>
+<span>📏 Range <b>${h.br}</b></span>
+</div>
 <div class=pks>${h.pk.map(k=>`<button type=button class=perk data-tip="${esc(PERK[k][0]+' — '+PERK[k][1])}">${IC[k]||'✨'} ${PERK[k][0]}</button>`).join('')||'<span class=note>No perks</span>'}</div>
-<div><div class=row style="justify-content:space-between"><span>⚡ <b class=en>${N(e,1)}</b> / ${m} (<span class=pc>${N(pc,0)}</span>%)</span><span class=note>${N(rate(h),1)}/min</span></div><div class=eb><i style="width:${pc}%"></i></div></div>
-<div class=tm>⏳ <b class=cd>${cdT(h)}</b><div class=note>Ready at <span class=ea>${eaT(h)}</span> · target ${h.tp}%</div></div>
-<div class=row style="margin:8px 0"><label>Target %<input type=number min=1 max=100 value="${h.tp}" data-h=tp data-i="${h.u}" style="width:72px"></label><label>Energy now<input type=number min=0 max=${m} id="e${h.u}" placeholder="0-${m}" style="width:92px"></label><button data-a=setE data-i="${h.u}">Set</button><label style="display:flex;gap:4px;align-items:center;flex-direction:row"><input type=checkbox data-h=al data-i="${h.u}" ${h.al?'checked':''}>🔔 alarm</label></div>
-<div class=row><button class=p data-a=work data-i="${h.u}">Sent to work</button><button data-a=edit data-i="${h.u}">Edit</button><button data-a=dup data-i="${h.u}">Dup</button><button data-a=arch data-i="${h.u}">${h.arch?'Restore':'Archive'}</button><button data-a=del data-i="${h.u}">Delete</button></div>${h.lw?`<div class=note style="margin-top:6px">Last sent to work ${fT(h.lw)}</div>`:''}</div>`};
+<div>
+<div class=row style="justify-content:space-between">
+<span>⚡ <b class=en>${N(e,1)}</b> / ${m} (<span class=pc>${N(pc,0)}</span>%)</span>
+<span class=note>${N(rate(h),1)}/min</span>
+</div>
+<div class=eb><i style="width:${pc}%"></i></div>
+</div>
+<div class=tm>
+⏳ <b class=cd>${cdT(h)}</b>
+<div class=note>Ready at <span class=ea>${eaT(h)}</span> · target ${h.tp}%</div>
+</div>
+<div class=row style="margin:8px 0">
+<label>Target %<input type=number min=1 max=100 value="${h.tp}" data-h=tp data-i="${h.u}" style="width:72px"></label>
+<label>Energy now<input type=number min=0 max=${m} id="e${h.u}" placeholder="0-${m}" style="width:92px"></label>
+<button data-a=setE data-i="${h.u}">Set</button>
+<label style="display:flex;gap:4px;align-items:center;flex-direction:row">
+<input type=checkbox data-h=al data-i="${h.u}" ${h.al?'checked':''}>🔔 alarm
+</label>
+</div>
+<div class=row>
+<button class=p data-a=work data-i="${h.u}">Sent to work</button>
+<button data-a=edit data-i="${h.u}">Edit</button>
+<button data-a=dup data-i="${h.u}">Dup</button>
+<button data-a=arch data-i="${h.u}">${h.arch?'Restore':'Archive'}</button>
+<button data-a=del data-i="${h.u}">Delete</button>
+</div>
+${h.lw?`<div class=note style="margin-top:6px">Last sent to work ${fT(h.lw)}</div>`:''}
+</div>`;
+};
 function hv(){const A=S.heroes.filter(h=>!h.arch),L=S.heroes.filter(h=>showA||!h.arch).sort(SORT[S.sort]||SORT.def),on=A.filter(h=>h.al).length,O=(v,l,c)=>`<option value="${v}"${c?' selected':''}>${l}</option>`;
 return`${ed?form():''}<div class=c style="margin-bottom:10px"><b>⚡ Paste all current energies</b><p class=note style="margin:4px 0 8px">One hero per line, like <b>Moonbeam Cow #32046 - 31</b>. Pasting updates every hero and starts each countdown (time to reach its target %).</p><textarea id=enp style="min-height:110px" placeholder="Moonbeam Cow #32046 - 31&#10;Zen Lapis #32054 - 32&#10;Rondo #32043 - 28"></textarea><div class=row style="margin-top:8px"><button class=p data-a=applyEn>Update energies</button><span class=note>${esc(enmsg)}</span></div></div>
 <div class=row><label>Sort<select data-s=sort>${[['def','Default'],['eta','Earliest ready'],['rar','Rarity'],['pct','Lowest energy %'],['name','Name']].map(([k,l])=>O(k,l,k===S.sort)).join('')}</select></label><label>Alarm sound<select data-s=ring>${[['beep','1 beep'],['30','Ring for 30 seconds'],['60','Ring for 1 minute']].map(([k,l])=>O(k,l,k===String(S.ring))).join('')}</select></label><label>Set all targets<select data-s=alltp>${O('','Choose…')}${[80,90,95,100].map(v=>O(v,v+'%')).join('')}</select></label><button data-a=alOn>☑ Select all alarms</button><button data-a=alOff>☐ Unselect all alarms</button><button data-a=tsnd>🔔 Test sound</button></div>
