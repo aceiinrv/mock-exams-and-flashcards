@@ -36,7 +36,30 @@ tr.grn td:first-child{border-left:6px solid var(--ok)}tr.yel td:first-child{bord
 #toasts{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;max-width:min(360px,calc(100vw - 24px));z-index:9}
 .t{background:var(--fg);color:var(--bg);padding:10px 12px;border-radius:8px}.t button{margin:6px 6px 0 0}
 pre{white-space:pre-wrap;font-size:13px}
-</style></head><body><div id="app"></div><div id="toasts"></div>
+.top{background:linear-gradient(90deg,#4c1d95,#1d4ed8);color:#fff;border-bottom:0}
+nav{background:color-mix(in srgb,#6d28d9 7%,var(--bg))}
+nav button.on,button.p{background:#6d28d9;color:#fff;border-color:#6d28d9}
+.g>.c{border-top-width:6px}.g>.c:nth-child(5n+1){border-top-color:#7c3aed}.g>.c:nth-child(5n+2){border-top-color:#0ea5e9}.g>.c:nth-child(5n+3){border-top-color:#16a34a}.g>.c:nth-child(5n+4){border-top-color:#f59e0b}.g>.c:nth-child(5n+5){border-top-color:#e11d48}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--fg) 5%,var(--bg))}
+.lg{display:grid;gap:14px}.lg.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}@media(max-width:820px){.lg.two{grid-template-columns:1fr}}
+.hg{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));margin-top:12px}
+.hc{--rc:#5b6472;border:1.5px solid var(--rc);border-top:7px solid var(--rc);border-radius:14px;padding:12px;background:color-mix(in srgb,var(--rc) 9%,var(--bg));box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hc.r1{--rc:#0b7a35}.hc.r2{--rc:#1d4ed8}.hc.r3{--rc:#7e22ce}.hc.r4{--rc:#a16207}.hc.r5{--rc:#be123c}
+.hh{display:flex;gap:12px;align-items:center}
+.pic{width:88px;height:88px;flex:none;border-radius:14px;border:3px solid var(--rc);background:color-mix(in srgb,var(--rc) 20%,var(--bg));display:grid;place-items:center;overflow:hidden;font-size:28px;font-weight:800;color:var(--rc)}
+.pic img{width:100%;height:100%;object-fit:cover}
+.hn{font-size:18px;font-weight:800;line-height:1.2}.hid{color:var(--mu);font-weight:600;font-size:14px}
+.rp{background:var(--rc);color:#fff;border-radius:99px;padding:1px 10px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.lv{font-size:12px;font-weight:700;border:1.5px solid var(--rc);border-radius:99px;padding:0 8px}
+.sts{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px}.sts span{border:1px solid var(--ln);background:var(--bg);border-radius:8px;padding:2px 8px;font-size:13px}
+.pks{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.perk{border:1.5px solid var(--rc);background:var(--bg);border-radius:99px;padding:2px 10px;font-size:13px;cursor:help}
+.eb{height:12px;border:1.5px solid var(--bd);border-radius:99px;overflow:hidden;margin-top:5px;background:var(--bg)}.eb i{display:block;height:100%;background:var(--er)}
+.s-yel .eb i{background:#d99a00}.s-grn .eb i{background:var(--ok)}.s-gry .eb i{background:var(--gr)}
+.tm{margin-top:8px;font-size:16px}
+#tip{display:none;position:fixed;z-index:20;max-width:260px;background:var(--fg);color:var(--bg);padding:8px 10px;border-radius:8px;font-size:13px;font-weight:600;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+label.fb{display:inline-block;cursor:pointer;border:1.5px solid var(--bd);border-radius:6px;padding:6px 10px;font-size:16px;font-weight:600;color:var(--fg)}label.fb input{display:none}
+</style></head><body><div id="app"></div><div id="toasts"></div><div id="tip"></div>
 <script>
 const $=s=>document.querySelector(s),
 N=(n,d=2)=>n==null||!isFinite(n)?'—':(+n).toLocaleString('en-US',{maximumFractionDigits:d}),
@@ -52,7 +75,7 @@ const RAR=['Common','Rare','Super Rare','Epic','Legend','Super Legend'];
 const SEED=[['Moonbeam Cow','32046X',2,8,7,9,3,3,'TH JB BL',67],['Zen Lapis','32054X',1,6,5,5,2,2,'TH BM',77],['Rondo','32043X',0,3,1,3,1,1,'BL',46],['Rondo','32044X',0,2,1,2,1,1,'BL',31],['Sir Fudsworth','32045X',0,2,1,1,1,1,'JB',31],['Rondo','32047X',0,1,3,2,1,1,'BL',32],['Rondo','32053X',0,3,3,2,1,1,'FC',59],['Moonbeam Cow','32055X',0,3,3,3,1,1,'BL',72],['GM Toast','32056X',0,3,2,3,1,1,'BL',71],['Zen Lapis','32057X',0,1,3,2,1,1,'JB',32],['Laser Beanie','32064X',0,3,2,1,1,1,'BL',32],['Laser Beanie','32065X',0,3,1,1,1,1,'BM',31],['Rekt Rex','32066X',0,3,2,1,1,1,'BL',32],['GM Toast','32067X',0,3,1,3,1,1,'BL',70],['Rekt Rex','32068X',0,2,2,2,1,1,'FC',86]];
 const ORD=['32046','32054','32043','32044','32045','32047','32053','32055','32056','32057','32064','32065','32066','32067','32068'];
 const mk=a=>({u:uid(),n:a[0],id:a[1],r:a[2],lv:1,p:a[3],s:a[4],st:a[5],bn:a[6],br:a[7],pk:a[8].split(' ').filter(Boolean),e:a[9],t:Date.now(),status:'rest',tp:90,al:true,note:'',lw:0,fired:0,snz:0,arch:false});
-const def=()=>({px:{usd:.000432,sol:103.84,fx:62.861,t:'2026-10-15T18:46:00Z',ft:'2026-10-14T14:10:00Z',src:'GeckoTerminal snapshot',fsrc:'Pluang snapshot',mode:'snapshot',chg:39.33,rt:66382876.98},inv:10000,lead:5,bal:0,sort:'def',a:{fee:3,studio:.0025,net:.00001,dex:.25,min:1e5},heroes:SEED.map(a=>mk(a)),led:[],cash:[]});
+const def=()=>({px:{usd:.000432,sol:103.84,fx:62.861,t:'2026-10-15T18:46:00Z',ft:'2026-10-14T14:10:00Z',src:'GeckoTerminal snapshot',fsrc:'Pluang snapshot',mode:'snapshot',chg:39.33,rt:66382876.98},inv:10000,lead:5,bal:0,sort:'def',ring:'beep',a:{fee:3,studio:.0025,net:.00001,dex:.25,min:1e5},heroes:SEED.map(a=>mk(a)),led:[],cash:[]});
 const load=()=>{try{return JSON.parse(localStorage.getItem(K))}catch(e){return null}},save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
 let S=load()||def(),tab=0,ed=null,showA=false,lmsg='';
 const had=S.bal!=null;{const D=def();Object.keys(D).forEach(k=>{if(S[k]==null)S[k]=D[k]})}if(!had)S.bal=(S.chest||0)+(S.wal||0);
@@ -79,17 +102,63 @@ function ls(){const L=S.led.filter(r=>r.a>0);if(!L.length)return null;const tot=
 const C=(l,v,s)=>`<div class=c><div class=l>${l}</div><div class=big>${v}</div><div class=s>${s||''}</div></div>`;
 const badge=()=>{const p=S.px,a=(Date.now()-Date.parse(p.t))/6e4;return p.mode==='live'&&a<5?['grn','LIVE']:p.mode==='manual'?['yel','YOUR PRICE']:['red','SNAPSHOT · NOT LIVE']};
 const pxForm=()=>`<details><summary>Update price (copy it from GeckoTerminal)</summary><div class=row style="margin-top:8px"><label>BOMBERS in USD<input id=m_usd type=text inputmode=decimal value="${N(S.px.usd,10)}" style="width:150px"></label><label>SOL in USD<input id=m_sol type=text inputmode=decimal value="${N(S.px.sol,4)}" style="width:110px"></label><label>₱ per $1<input id=m_fx type=text inputmode=decimal value="${N(S.px.fx,4)}" style="width:100px"></label><button class=p data-a=savePx>Save</button></div></details>`;
+/* extras */
+let showLog=false,enmsg='',IMG={},pin=null,AC=null,RI=null,RT=null;try{IMG=JSON.parse(localStorage.getItem('sbcc-img'))||{}}catch(e){}
+const SOLK='https://www.coingecko.com/en/coins/solana?chart=type%3Dprice%26mode%3Dline%26timeframe%3Dd30',FXK='https://www.google.com/search?q=usd+to+php&ie=UTF-8',
+IC={TH:'💰',JB:'🔓',PB:'🧱',SB:'🔋',FC:'⚡',BM:'💣',BL:'🚧'},nid=h=>String(h.id).replace(/\D/g,''),
+dk=()=>(document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))==='dark',
+tv=s=>'https://s.tradingview.com/embed-widget/mini-symbol-overview/?locale=en#'+encodeURIComponent(JSON.stringify({symbol:s,width:'100%',height:'100%',dateRange:'1D',colorTheme:dk()?'dark':'light',isTransparent:false,autosize:true,largeChartUrl:''})),
+p2=n=>String(n).padStart(2,'0'),
+fmtL=t=>{const d=new Date(t),h=d.getHours();return`${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}, ${h%12||12}:${p2(d.getMinutes())}:${p2(d.getSeconds())} ${h<12?'AM':'PM'}`},
+ledTxt=()=>'Reward ledger (all saved: '+S.led.length+' rows)\n'+S.led.slice().sort((a,b)=>b.t-a.t).map(r=>fmtL(r.t)+'\t'+r.y+'\t'+r.a).join('\n');
+function logPanel(){return`<div class=c><div class=row style="justify-content:space-between"><b>📄 All saved logs (${S.led.length} rows)</b><span class=row><button class=p data-a=dlLed>⬇ Download .txt</button><button data-a=cpLed>Copy</button><button data-a=showLed>Hide</button></span></div><textarea readonly id=alltxt style="margin-top:8px;min-height:62vh;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre">${esc(ledTxt())}</textarea></div>`}
+function ledv(){return`<div class="lg${showLog?' two':''}"><div>${ledvMain()}</div>${showLog?`<div>${logPanel()}</div>`:''}</div>`}
+function liveFrames(){const f=(t,l,lt,src,h)=>`<div class=c><div class=row style="justify-content:space-between"><b>${t}</b><a href="${esc(l)}" target="_blank" rel="noopener noreferrer">${lt} ↗</a></div><iframe src="${esc(src)}" title="${esc(t)}" loading=lazy sandbox="allow-scripts allow-same-origin allow-popups" style="width:100%;height:${h}px;border:0;margin-top:8px;background:var(--grb)"></iframe></div>`;
+return`<h2>📊 Live prices</h2><div class=row><a href="${esc(LINK)}" target="_blank" rel="noopener noreferrer">$BOMBERS on GeckoTerminal ↗</a><a href="${esc(SOLK)}" target="_blank" rel="noopener noreferrer">SOL on CoinGecko ↗</a><a href="${esc(FXK)}" target="_blank" rel="noopener noreferrer">USD → PHP on Google ↗</a></div>
+<p class=note>Google and CoinGecko normally refuse to be shown inside other pages, so the SOL and USD → PHP boxes use TradingView's live charts; the links above open your exact pages. If a box stays blank, the page or your browser is blocking it, so use the link. Copy the numbers into "Update price" above to refresh your conversions.</p>
+<div class=g style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">${f('💣 $BOMBERS · GeckoTerminal',LINK,'Open',LINK+'?embed=1&info=0&swaps=0&light_chart='+(dk()?0:1)+'&chart_type=price&resolution=15m',460)}${f('◎ SOL · TradingView',SOLK,'CoinGecko',tv('COINBASE:SOLUSD'),230)}${f('₱ USD → PHP · TradingView',FXK,'Google',tv('FX_IDC:USDPHP'),230)}</div>`}
+const unlock=()=>{try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}};
+document.addEventListener('click',unlock);document.addEventListener('keydown',unlock);
+function beep(){try{unlock();const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=880;g.gain.value=.15;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+.3)}catch(e){}try{navigator.vibrate&&navigator.vibrate(250)}catch(e){}}
+function stopRing(){clearInterval(RI);clearTimeout(RT);RI=RT=null}
+function startRing(){stopRing();beep();if(S.ring==='beep')return;RI=setInterval(beep,1000);RT=setTimeout(stopRing,(+S.ring||30)*1000)}
+function showTip(el){const t=$('#tip');t.textContent=el.dataset.tip;t.style.display='block';const r=el.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight;t.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';t.style.top=(r.bottom+8+h>innerHeight?Math.max(8,r.top-h-8):r.bottom+8)+'px'}
+const hideTip=()=>{$('#tip').style.display='none'};
+document.addEventListener('mouseover',e=>{const p=e.target.closest('.perk');if(p&&!pin)showTip(p)});
+document.addEventListener('mouseout',e=>{if(!pin&&e.target.closest('.perk'))hideTip()});
+document.addEventListener('click',e=>{const p=e.target.closest('.perk');if(p){pin=pin===p?null:p;pin?showTip(p):hideTip()}else if(pin){pin=null;hideTip()}});
+document.addEventListener('paste',e=>{if(e.target.id==='enp')setTimeout(applyEn,0)});
+const thumb=f=>new Promise(res=>{const r=new FileReader();r.onerror=()=>res(null);r.onload=()=>{const i=new Image();i.onerror=()=>res(null);i.onload=()=>{try{const c=document.createElement('canvas'),k=Math.min(1,200/Math.max(i.width,i.height));c.width=Math.max(1,Math.round(i.width*k));c.height=Math.max(1,Math.round(i.height*k));c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/webp',.85))}catch(e){res(null)}};i.src=r.result};r.readAsDataURL(f)});
+async function loadImgs(files){let n=0,sk=0;for(const f of files){const m=f.name.match(/#\s*(\d+)/);if(!m||!S.heroes.some(h=>nid(h)===m[1])){sk++;continue}const u=await thumb(f);if(u){IMG[m[1]]=u;n++}else sk++}try{localStorage.setItem('sbcc-img',JSON.stringify(IMG))}catch(e){toast('Images show for now, but the browser has no room to keep them.')}toast('Loaded '+n+' image(s)'+(sk?', skipped '+sk:'')+'.');render()}
+function applyEn(){const L=[];$('#enp').value.split(/\r?\n/).forEach(l=>{const m=l.match(/#\s*(\d+)\s*X?\s*[-–—:=]?\s*(\d+(?:\.\d+)?)(?:\s*\/\s*\d+)?\s*$/i);if(m)L.push([m[1],parseFloat(m[2])])});
+if(!L.length)return toast('No heroes found. Use lines like: Rondo #32043 - 28');
+const now=Date.now(),bad=[];let ok=0;L.forEach(([id,v])=>{const h=S.heroes.find(x=>nid(x)===id);if(!h){bad.push('#'+id);return}h.e=Math.min(v,maxE(h.st));h.t=now;h.status='rest';h.fired=0;ok++});
+enmsg='Updated '+ok+' hero(es).'+(bad.length?' Not found: '+bad.join(', ')+'.':'');save();render()}
+const card=h=>{const[s,l]=stt(h),e=ne(h),m=maxE(h.st),pc=Math.min(100,e/m*100),pic=IMG[nid(h)],ini=h.n.split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+return`<div class="hc r${h.r} s-${s}" data-r="${h.u}"><div class=hh><div class=pic>${pic?`<img src="${pic}" alt="${esc(h.n)}">`:`<span>${esc(ini)}</span>`}</div><div class=hm><div class=hn>${esc(h.n)} <span class=hid>#${esc(h.id)}</span></div><div class=row style="gap:6px;margin-top:6px;align-items:center"><span class=rp>${RAR[h.r]}</span><span class=lv>Lv ${h.lv}/5</span><span class="b chip ${s}">${l}</span></div></div></div>
+<div class=sts><span>💥 Power <b>${h.p}</b></span><span>👟 Speed <b>${h.s}</b></span><span>🔋 Stamina <b>${h.st}</b></span><span>💣 Bombs <b>${h.bn}</b></span><span>📏 Range <b>${h.br}</b></span></div>
+<div class=pks>${h.pk.map(k=>`<button type=button class=perk data-tip="${esc(PERK[k][0]+' — '+PERK[k][1])}">${IC[k]||'✨'} ${PERK[k][0]}</button>`).join('')||'<span class=note>No perks</span>'}</div>
+<div><div class=row style="justify-content:space-between"><span>⚡ <b class=en>${N(e,1)}</b> / ${m} (<span class=pc>${N(pc,0)}</span>%)</span><span class=note>${N(rate(h),1)}/min</span></div><div class=eb><i style="width:${pc}%"></i></div></div>
+<div class=tm>⏳ <b class=cd>${cdT(h)}</b><div class=note>Ready at <span class=ea>${eaT(h)}</span> · target ${h.tp}%</div></div>
+<div class=row style="margin:8px 0"><label>Target %<input type=number min=1 max=100 value="${h.tp}" data-h=tp data-i="${h.u}" style="width:72px"></label><label>Energy now<input type=number min=0 max=${m} id="e${h.u}" placeholder="0-${m}" style="width:92px"></label><button data-a=setE data-i="${h.u}">Set</button><label style="display:flex;gap:4px;align-items:center;flex-direction:row"><input type=checkbox data-h=al data-i="${h.u}" ${h.al?'checked':''}>🔔 alarm</label></div>
+<div class=row><button class=p data-a=work data-i="${h.u}">Sent to work</button><button data-a=edit data-i="${h.u}">Edit</button><button data-a=dup data-i="${h.u}">Dup</button><button data-a=arch data-i="${h.u}">${h.arch?'Restore':'Archive'}</button><button data-a=del data-i="${h.u}">Delete</button></div>${h.lw?`<div class=note style="margin-top:6px">Last sent to work ${fT(h.lw)}</div>`:''}</div>`};
+function hv(){const A=S.heroes.filter(h=>!h.arch),L=S.heroes.filter(h=>showA||!h.arch).sort(SORT[S.sort]||SORT.def),on=A.filter(h=>h.al).length,O=(v,l,c)=>`<option value="${v}"${c?' selected':''}>${l}</option>`;
+return`${ed?form():''}<div class=c style="margin-bottom:10px"><b>⚡ Paste all current energies</b><p class=note style="margin:4px 0 8px">One hero per line, like <b>Moonbeam Cow #32046 - 31</b>. Pasting updates every hero and starts each countdown (time to reach its target %).</p><textarea id=enp style="min-height:110px" placeholder="Moonbeam Cow #32046 - 31&#10;Zen Lapis #32054 - 32&#10;Rondo #32043 - 28"></textarea><div class=row style="margin-top:8px"><button class=p data-a=applyEn>Update energies</button><span class=note>${esc(enmsg)}</span></div></div>
+<div class=row><label>Sort<select data-s=sort>${[['def','Default'],['eta','Earliest ready'],['rar','Rarity'],['pct','Lowest energy %'],['name','Name']].map(([k,l])=>O(k,l,k===S.sort)).join('')}</select></label><label>Alarm sound<select data-s=ring>${[['beep','1 beep'],['30','Ring for 30 seconds'],['60','Ring for 1 minute']].map(([k,l])=>O(k,l,k===String(S.ring))).join('')}</select></label><label>Set all targets<select data-s=alltp>${O('','Choose…')}${[80,90,95,100].map(v=>O(v,v+'%')).join('')}</select></label><button data-a=alOn>☑ Select all alarms</button><button data-a=alOff>☐ Unselect all alarms</button><button data-a=tsnd>🔔 Test sound</button></div>
+<div class=row style="margin-top:8px"><button class=p data-a=add>Add hero</button><button data-a=notif>Enable notifications</button><label class=fb>🖼 Load hero images<input type=file multiple accept="image/*" data-s=imgs></label><label style="display:flex;gap:6px;align-items:center;flex-direction:row"><input type=checkbox data-s=arch ${showA?'checked':''}>Show archived</label><span class=note>Alarms on: <b>${on}</b> of ${A.length}</span></div>
+<p class=note>"Default" keeps your fixed order. Click or hover a perk to see what it does. Alarms ring only while this page is open (${S.lead} min before the target); this page cannot press Work in the game. Energy is an estimate from your last entry (0.5/min resting, +0.5 with Fast Charge). Images: press "Load hero images" once, open your solbom_image folder and select all the pictures.</p>
+<div class=hg>${L.map(card).join('')}</div>`}
 /* views */
 function ov(){const p=S.px,r=roi(),h=hs(),l=ls(),[bc,bl]=badge(),net=cashX(1e5).php/1e5,nd=l?l.perDay*net:null,days=r.rem<=0?0:bd(r.rem,nd),td=new Date().toDateString(),today=S.led.filter(x=>x.a>0&&new Date(x.t).toDateString()===td).reduce((s,x)=>s+x.a,0),nx=S.heroes.filter(x=>!x.arch&&x.status==='rest'&&secs(x)>0).sort((a,b)=>secs(a)-secs(b))[0];
-return`<div class=c style="margin-bottom:10px"><div class=row style="justify-content:space-between"><div class=l>$BOMBERS price</div><span class="b ${bc}">${bl}</span></div>
+return`<div class=c style="margin-bottom:10px"><div class=row style="justify-content:space-between"><div class=l>💣 $BOMBERS price</div><span class="b ${bc}">${bl}</span></div>
 <div class=g style="margin-top:6px"><div><div class=big>${U(p.usd,8)}</div><div class=s>US dollars</div></div><div><div class=big>₱${N(p.usd*p.fx,4)}</div><div class=s>Philippine pesos</div></div><div><div class=big>${N(p.usd/p.sol,9)}</div><div class=s>SOL</div></div></div>
 <p class=s>As of ${fT(p.t)} (${esc(p.src)}) · 24h ${N(p.chg)}% · SOL ${U(p.sol)} · $1 = ₱${N(p.fx,2)}<br><a href="${LINK}" target="_blank" rel="noopener noreferrer">See the live price on GeckoTerminal ↗</a></p>${pxForm()}</div>
 <div class=g>
-${C('Your BOMBERS',N(S.bal,0),`≈ ${P(S.bal*p.usd*p.fx)} · ${U(S.bal*p.usd)}<br><button data-a=tab data-i=2>Change on Converter</button>`)}
-${C('Money recovered',P(r.cash)+' <span class=s>of '+P(r.inv)+'</span>',`<div class=bar><i style="width:${r.pct}%"></i></div>${N(r.pct,1)}% recovered · remaining <b>${P(r.rem)}</b>`)}
-${C('Days to break-even',r.rem<=0?'Done ✓':days==null?'—':days<1?'< 1 day':N(days,0)+' days',days==null?'Paste your reward ledger to get an estimate':`≈ ${P(nd)}/day after fees, from ${N(l.days,1)} day(s) of ledger`)}
-${C('Earned (ledger)',N(today,0)+' <span class=s>today</span>',l?`${N(l.perDay,0)} per day on average · ${N(l.tot,0)} total`:'Nothing pasted yet')}
-${C('Heroes',`${h.w} / ${h.r} / ${h.y}`,`working / resting / ready (of ${h.n})`+(nx?`<br>Next ready: ${esc(nx.n)} #${esc(nx.id)} in ${dur(secs(nx))}`:''))}
+${C('🎒 Your BOMBERS',N(S.bal,0),`≈ ${P(S.bal*p.usd*p.fx)} · ${U(S.bal*p.usd)}<br><button data-a=tab data-i=2>Change on Converter</button>`)}
+${C('💰 Money recovered',P(r.cash)+' <span class=s>of '+P(r.inv)+'</span>',`<div class=bar><i style="width:${r.pct}%"></i></div>${N(r.pct,1)}% recovered · remaining <b>${P(r.rem)}</b>`)}
+${C('📅 Days to break-even',r.rem<=0?'Done ✓':days==null?'—':days<1?'< 1 day':N(days,0)+' days',days==null?'Paste your reward ledger to get an estimate':`≈ ${P(nd)}/day after fees, from ${N(l.days,1)} day(s) of ledger`)}
+${C('🏆 Earned (ledger)',N(today,0)+' <span class=s>today</span>',l?`${N(l.perDay,0)} per day on average · ${N(l.tot,0)} total`:'Nothing pasted yet')}
+${C('🦸 Heroes',`${h.w} / ${h.r} / ${h.y}`,`working / resting / ready (of ${h.n})`+(nx?`<br>Next ready: ${esc(nx.n)} #${esc(nx.id)} in ${dur(secs(nx))}`:''))}
 </div>
 <details style="margin-top:12px"><summary>Add money you received (₱)</summary><div class=row style="margin:8px 0"><label>Amount in PHP<input id=ca type=text inputmode=decimal style="width:150px"></label><button class=p data-a=addCash>Add</button></div>${S.cash.length?`<table style="min-width:0">${S.cash.map((x,i)=>`<tr><td>${fT(x.t)}</td><td>${P(x.php)}</td><td><button data-a=delCash data-i=${i}>Delete</button></td></tr>`).join('')}</table>`:''}</details>`}
 const rowH=h=>{const[s,l]=stt(h),e=ne(h),m=maxE(h.st);return`<tr data-r="${h.u}" class="${s}"><td><b>${esc(h.n)}</b> #${esc(h.id)}<br><span class=note>${RAR[h.r]} · Lv${h.lv}/5 · P${h.p} S${h.s} St${h.st} B${h.bn}/R${h.br}</span><br><span class=note>${h.pk.map(k=>PERK[k][0]).join(', ')}</span>${h.note?`<br><span class=note>${esc(h.note)}</span>`:''}${h.lw?`<br><span class=note>last sent to work ${fT(h.lw)}</span>`:''}</td>
@@ -100,32 +169,32 @@ const rowH=h=>{const[s,l]=stt(h),e=ne(h),m=maxE(h.st);return`<tr data-r="${h.u}"
 <td><label style="display:flex;gap:4px;align-items:center"><input type=checkbox data-h=al data-i="${h.u}" ${h.al?'checked':''}>alarm</label></td>
 <td><div class=row><button class=p data-a=work data-i="${h.u}">Sent to work</button><button data-a=edit data-i="${h.u}">Edit</button><button data-a=dup data-i="${h.u}">Dup</button><button data-a=arch data-i="${h.u}">${h.arch?'Restore':'Archive'}</button><button data-a=del data-i="${h.u}">Delete</button></div></td></tr>`};
 const form=()=>{const h=ed==='new'?{n:'',id:'',r:0,lv:1,p:1,s:1,st:1,bn:1,br:1,pk:[],e:50,note:''}:{...S.heroes.find(x=>x.u===ed)};if(ed!=='new')h.e=Math.round(ne(h));return`<div class=c style="margin:10px 0"><b>${ed==='new'?'Add hero':'Edit hero'}</b><div class=row>${[['n','Name','text'],['id','ID (e.g. 32046X)','text'],['lv','Level','number'],['p','Power','number'],['s','Speed','number'],['st','Stamina','number'],['bn','Bomb Num','number'],['br','Bomb Range','number'],['e','Energy now','number']].map(([k,l,t])=>`<label>${l}<input id="f_${k}" type=${t} value="${esc(h[k])}" style="width:${t==='text'?'150px':'84px'}"></label>`).join('')}<label>Rarity<select id=f_r>${RAR.map((x,i)=>`<option value=${i} ${i==h.r?'selected':''}>${x}</option>`).join('')}</select></label></div><div class=row style="margin:8px 0">${Object.keys(PERK).map(k=>`<label style="display:flex;gap:4px;align-items:center"><input type=checkbox id="p_${k}" ${h.pk.includes(k)?'checked':''}>${PERK[k][0]}</label>`).join('')}</div><label>Notes<input id=f_note value="${esc(h.note)}" style="width:100%"></label><div class=row style="margin-top:8px"><button class=p data-a=saveH>Save</button><button data-a=cancel>Cancel</button></div></div>`};
-function hv(){const L=S.heroes.filter(h=>showA||!h.arch).sort(SORT[S.sort]||SORT.def);
+function hvOld(){const L=S.heroes.filter(h=>showA||!h.arch).sort(SORT[S.sort]||SORT.def);
 return`${ed?form():''}<div class=row><label>Sort<select data-s=sort>${[['def','Default'],['eta','Earliest ready'],['rar','Rarity'],['pct','Lowest energy %'],['name','Name']].map(([k,l])=>`<option value=${k} ${k===S.sort?'selected':''}>${l}</option>`).join('')}</select></label><label style="display:flex;gap:6px;align-items:center"><input type=checkbox data-s=arch ${showA?'checked':''}>Show archived</label><button class=p data-a=add>Add hero</button><button data-a=notif>Enable notifications</button></div>
 <p class=note>"Default" keeps your fixed order, so rows never jump when you set an energy. Alarms ring only while this page is open (${S.lead} min before the target); use your phone's own alarm as the backup. This page cannot press Work in the game. Energy is an <b>estimate</b> from your last entry (0.5/min resting outside, +0.5 with Fast Charge).</p>
 <div class=tw><table><tr><th>Hero</th><th>Energy</th><th>Recovery</th><th>Target</th><th>Time left</th><th>Ready at</th><th>Alarm</th><th>Actions</th></tr>${L.map(rowH).join('')}</table></div>`}
 function cv(){return`<h2>How much are my $BOMBERS worth?</h2><label>Paste your BOMBERS balance from the game<input id=bal type=text inputmode=decimal placeholder="e.g. 12,345.67" value="${S.bal?N(S.bal,6):''}" style="width:100%;font-size:22px;padding:12px"></label><div id=res style="margin-top:12px"></div>
-<p class=note>Price used: ${U(S.px.usd,8)} per BOMBERS, $1 = ₱${N(S.px.fx,2)} (${S.px.mode==='live'?'live':S.px.mode==='manual'?'entered by you':'snapshot'} · ${fT(S.px.t)}). <a href="${LINK}" target="_blank" rel="noopener noreferrer">Check the live price ↗</a></p>${pxForm()}`}
+<p class=note>Price used: ${U(S.px.usd,8)} per BOMBERS, $1 = ₱${N(S.px.fx,2)} (${S.px.mode==='live'?'live':S.px.mode==='manual'?'entered by you':'snapshot'} · ${fT(S.px.t)}). <a href="${LINK}" target="_blank" rel="noopener noreferrer">Check the live price ↗</a></p>${pxForm()}${liveFrames()}`}
 function conv(){const v=pb($('#bal').value)||0,p=S.px,c=cashX(v);S.bal=v;save();
 $('#res').innerHTML=`<div class=g><div class=c><div class=l>Philippine peso</div><div class=big>${P(v*p.usd*p.fx)}</div></div><div class=c><div class=l>US dollar</div><div class=big>${U(v*p.usd)}</div></div><div class=c><div class=l>SOL</div><div class=big>${N(v*p.usd/p.sol,4)}</div></div></div><p>${v>=S.a.min?`If you cash out and sell: about <b>${P(c.php)}</b> take-home after the ${S.a.fee}% game fee, SOL fees and swap costs (estimate; taxes not included).`:`Cashout needs at least ${N(S.a.min,0)} BOMBERS. You need ${N(S.a.min-v,0)} more.`}</p>`}
-function ledv(){const l=ls(),p=S.px,D={};
+function ledvMain(){const l=ls(),p=S.px,D={};
 const CH=[['Wooden chest',35.625],['Metal chest',81.25],['Gold chest',406.25],['Diamond chest',812.5]];
 let bk='',days='';if(l){l.L.forEach(r=>{const k=new Date(r.t).toDateString();(D[k]=D[k]||{t:r.t,n:0,s:0}).n++;D[k].s+=r.a});
 const rows=CH.map(([n,v])=>{const x=l.L.filter(r=>Math.abs(r.a-v)<.001);return[n,x.length,x.reduce((s,r)=>s+r.a,0)]}),o=l.L.filter(r=>!CH.some(c=>Math.abs(r.a-c[1])<.001));rows.push(['Other rewards',o.length,o.reduce((s,r)=>s+r.a,0)]);
 bk=`<h2>By chest type</h2><div class=tw><table style="min-width:0"><tr><th>Type</th><th class=r>Count</th><th class=r>BOMBERS</th></tr>${rows.map(x=>`<tr><td>${x[0]}</td><td class=r>${x[1]}</td><td class=r>${N(x[2],2)}</td></tr>`).join('')}</table></div>`;
 days=`<h2>Per day</h2><div class=tw><table style="min-width:0"><tr><th>Day</th><th class=r>Rewards</th><th class=r>BOMBERS</th><th class=r>≈ PHP</th></tr>${Object.values(D).sort((a,b)=>b.t-a.t).slice(0,14).map(x=>`<tr><td>${new Date(x.t).toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'})}</td><td class=r>${x.n}</td><td class=r>${N(x.s,2)}</td><td class=r>${P(x.s*p.usd*p.fx)}</td></tr>`).join('')}</table></div>`}
-return`<h2>Reward ledger</h2><textarea id=led placeholder="Paste the game's &quot;Reward ledger (last 100)&quot; here. Each line looks like:&#10;10/15/2026, 2:53:19 AM   hunt_chest   406.25"></textarea><div class=row style="margin-top:8px"><button class=p data-a=addLed>Add to ledger</button><button data-a=clrLed>Clear ledger</button></div>
+return`<h2>Reward ledger</h2><textarea id=led placeholder="Paste the game's &quot;Reward ledger (last 100)&quot; here. Each line looks like:&#10;10/15/2026, 2:53:19 AM   hunt_chest   406.25"></textarea><div class=row style="margin-top:8px"><button class=p data-a=addLed>Add to ledger</button><button data-a=showLed>📄 Show all logs from ledger</button><button data-a=clrLed>Clear ledger</button></div>
 ${lmsg?`<div class=${lmsg.includes('⚠')?'warn':'c'} style="margin-top:10px">${esc(lmsg)}</div>`:''}
 <p class=note>Paste as often as you like: rows already saved are skipped, so overlapping pastes never double-count (identical rows in the same second are kept). The game only shows the last 100 rows, so paste before more than 100 new rewards pile up or some will be missed.</p>
 ${l?`<div class=g>${C('Total earned',N(l.tot,2),`≈ ${P(l.tot*p.usd*p.fx)} at today's price`)}${C('Average per day',N(l.perDay,0),`${N(l.days,1)} day(s) tracked (counts at least 1 day)`)}${C('Rewards saved',N(l.n,0),`${fT(l.t0)} to ${fT(l.t1)}`)}</div>${bk}${days}`:'<p>Nothing saved yet.</p>'}`}
 function sv(){return`<h2>Settings</h2><div class=row><label>Money invested (₱)<input type=number step=any data-b=inv value="${S.inv}"></label><label>Alarm warning (minutes before target)<input type=number data-b=lead value="${S.lead}"></label></div>
 <h2>Backup</h2><div class=row><button data-a=exp>Download backup</button><label>Restore a backup<input type=file accept=".json" data-s=restore></label><button data-a=reset>Erase everything</button></div><p class=note>Everything is saved in this browser only. This page never asks for seed phrases or signs transactions.</p>
 <h2>Checks</h2><button data-a=test>Run calculation tests</button><pre id=tr></pre>`}
-function render(){$('#app').innerHTML=`<div class=top><h1>Solana Bombers Command Center</h1><button data-a=theme>Light / Dark</button></div><nav>${TABS.map((t,i)=>`<button data-a=tab data-i=${i} class="${i==tab?'on':''}">${t}</button>`).join('')}</nav><main>${[ov,hv,cv,ledv,sv][tab]()}</main>`;if(tab===2)conv()}
+function render(){pin=null;hideTip();$('#app').innerHTML=`<div class=top><h1>Solana Bombers Command Center</h1><button data-a=theme>Light / Dark</button></div><nav>${TABS.map((t,i)=>`<button data-a=tab data-i=${i} class="${i==tab?'on':''}">${t}</button>`).join('')}</nav><main>${[ov,hv,cv,ledv,sv][tab]()}</main>`;if(tab===2)conv()}
 /* actions */
 const arm=(b,fn)=>{if(b.dataset.arm){fn();return}b.dataset.arm=1;const t=b.textContent;b.textContent='Confirm?';setTimeout(()=>{b.dataset.arm='';b.textContent=t},3000)};
 function toast(m,h){const d=document.createElement('div');d.className='t';d.textContent=m;if(h)d.insertAdjacentHTML('beforeend',`<div><button data-a=snz data-i="${h.u}">Snooze 10m</button><button data-a=work data-i="${h.u}">Sent to work</button><button data-a=dis>Dismiss</button></div>`);else setTimeout(()=>d.remove(),4500);$('#toasts').append(d)}
-function ring(h){const m=`${h.n} #${h.id} reached ${h.tp}%. Open the game and press Work.`;toast(m,h);try{if(Notification.permission==='granted')new Notification('Hero ready',{body:m})}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}try{const x=new(window.AudioContext||window.webkitAudioContext)(),o=x.createOscillator();o.connect(x.destination);o.start();setTimeout(()=>{o.stop();x.close()},250)}catch(e){}}
+function ring(h){const m=`${h.n} #${h.id} reached ${h.tp}%. Open the game and press Work.`;toast(m,h);try{if(Notification.permission==='granted')new Notification('Hero ready',{body:m})}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}startRing()}
 async function dl(n,d){try{const D=window.claude&&await claude.use('downloads');if(!D)return toast('Downloads are unavailable in this view.');await D.save({filename:n,data:d})}catch(e){if(!e||e.code!=='declined')toast('Could not save file ('+((e&&e.code)||'error')+').')}}
 function saveH(){const g=k=>$('#f_'+k).value,n=k=>+g(k),d={n:g('n').trim(),id:g('id').trim(),r:n('r'),lv:n('lv'),p:n('p'),s:n('s'),st:n('st'),bn:n('bn'),br:n('br'),note:g('note'),pk:Object.keys(PERK).filter(k=>$('#p_'+k).checked)},e=n('e');
 if(!d.n||[d.lv,d.p,d.s,d.st,d.bn,d.br,e].some(x=>!isFinite(x)||x<0)||d.lv<1||d.lv>5||d.st<1||e>maxE(d.st))return toast('Check inputs: name required, level 1 to 5, stamina ≥ 1, energy 0 to max.');
@@ -136,9 +205,9 @@ lmsg=`Read ${rows.length} rows: ${add} new, ${rows.length-add} already saved.`+(
 function go(a,i,b){const h=i&&S.heroes.find(x=>x.u===i);switch(a){
 case'theme':{const c=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');S.theme=c==='dark'?'light':'dark';document.documentElement.dataset.theme=S.theme;save();break}
 case'tab':tab=+i;ed=null;render();scrollTo(0,0);break;
-case'dis':b.closest('.t').remove();break;
-case'snz':if(h){h.fired=0;h.snz=Date.now()+6e5;save()}b.closest('.t').remove();break;
-case'work':{if(!h)break;h.e=ne(h);h.t=Date.now();h.status='work';h.lw=Date.now();h.fired=0;save();const t=b.closest('.t');if(t)t.remove();render();break}
+case'dis':stopRing();b.closest('.t').remove();break;
+case'snz':stopRing();if(h){h.fired=0;h.snz=Date.now()+6e5;save()}b.closest('.t').remove();break;
+case'work':{stopRing();if(!h)break;h.e=ne(h);h.t=Date.now();h.status='work';h.lw=Date.now();h.fired=0;save();const t=b.closest('.t');if(t)t.remove();render();break}
 case'setE':{const v=+$('#e'+i).value,m=maxE(h.st);if($('#e'+i).value===''||!(v>=0&&v<=m))return toast('Energy must be 0 to '+m);h.e=v;h.t=Date.now();h.status='rest';h.fired=0;save();render();break}
 case'edit':ed=i;render();scrollTo(0,0);break;
 case'add':ed='new';render();scrollTo(0,0);break;
@@ -155,6 +224,13 @@ case'addLed':addLed();break;
 case'clrLed':arm(b,()=>{S.led=[];lmsg='';save();render()});break;
 case'exp':dl('bombers-backup.json',JSON.stringify(S,null,1));break;
 case'reset':arm(b,()=>{try{localStorage.removeItem(K)}catch(e){}S=def();save();render()});break;
+case'alOn':S.heroes.forEach(h=>{if(!h.arch){h.al=true;h.fired=0}});save();render();break;
+case'alOff':S.heroes.forEach(h=>{if(!h.arch)h.al=false});save();render();break;
+case'tsnd':{startRing();const d=document.createElement('div');d.className='t';d.innerHTML='Test alarm <button data-a=dis>Stop / close</button>';$('#toasts').append(d);break}
+case'applyEn':applyEn();break;
+case'showLed':showLog=!showLog;render();break;
+case'dlLed':dl('reward-ledger.txt',ledTxt());break;
+case'cpLed':{const t=$('#alltxt');t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}toast(ok?'Copied all logs.':'Press Ctrl+A then Ctrl+C inside the box to copy.');break}
 case'test':$('#tr').textContent=tests().join('\n');break}}
 function tests(){const T=[],ok=(n,c)=>T.push((c?'PASS  ':'FAIL  ')+n),c=cash(1e5,{price:1,sol:100,fx:60,fee:3,studio:.0025,net:0,dex:0,rt:0}),q=R(1e4,2500),L=parseLed('10/15/2026, 2:53:19 AM\thunt_chest\t406.25');
 ok('Max energy at 9 stamina = 450',maxE(9)===450);
@@ -165,14 +241,14 @@ ok('25% recovered, ₱7,500 left',q.pct===25&&q.rem===7500);
 ok('Ledger line parses (406.25)',L.length===1&&L[0].a===406.25);
 return T}
 async function refresh(){const p=S.px;try{const r=await fetch('https://api.geckoterminal.com/api/v2/networks/solana/pools/'+POOL);if(!r.ok)throw 0;const j=await r.json(),a=j.data.attributes;if(j.data.relationships.base_token.data.id!=='solana_'+MINT)throw 0;const u=+a.base_token_price_usd,s=+a.quote_token_price_usd;if(!(u>0&&s>0))throw 0;let fx=p.fx,ft=p.ft;try{const f=await(await fetch('https://open.er-api.com/v6/latest/USD')).json();if(f.rates&&f.rates.PHP>0){fx=f.rates.PHP;ft=new Date().toISOString()}}catch(e){}Object.assign(p,{usd:u,sol:s,fx,ft,t:new Date().toISOString(),mode:'live',src:'GeckoTerminal (mint verified)',chg:+a.price_change_percentage.h24});save();render()}catch(e){}}
-function tick(){const now=Date.now();S.heroes.forEach(h=>{if(h.arch)return;const r=tab===1&&document.querySelector('[data-r="'+h.u+'"]');if(r){const[s,l]=stt(h),e=ne(h),m=maxE(h.st);r.className=s;r.querySelector('.en').textContent=N(e,1);r.querySelector('.pc').textContent=N(e/m*100,0);r.querySelector('.cd').textContent=cdT(h);r.querySelector('.ea').textContent=eaT(h);const c=r.querySelector('.chip');c.className='b chip '+s;c.textContent=l}
+function tick(){const now=Date.now();S.heroes.forEach(h=>{if(h.arch)return;const r=tab===1&&document.querySelector('[data-r="'+h.u+'"]');if(r){const[s,l]=stt(h),e=ne(h),m=maxE(h.st);r.className='hc r'+h.r+' s-'+s;r.querySelector('.eb i').style.width=Math.min(100,e/m*100)+'%';r.querySelector('.en').textContent=N(e,1);r.querySelector('.pc').textContent=N(e/m*100,0);r.querySelector('.cd').textContent=cdT(h);r.querySelector('.ea').textContent=eaT(h);const c=r.querySelector('.chip');c.className='b chip '+s;c.textContent=l}
 if(h.al&&h.status==='rest'&&h.fired!==h.t&&now>h.snz&&secs(h)<=S.lead*60){h.fired=h.t;save();ring(h)}})}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b){e.preventDefault();go(b.dataset.a,b.dataset.i,b)}});
 document.addEventListener('input',e=>{if(e.target.id==='bal')conv()});
 document.addEventListener('change',e=>{const t=e.target,d=t.dataset;
 if(d.b){const v=+t.value;if(t.value===''||!isFinite(v)||v<0)return toast('Enter a number ≥ 0.');S[d.b]=v;save();render()}
 else if(d.h){const h=S.heroes.find(x=>x.u===d.i);if(!h)return;if(d.h==='al')h.al=t.checked;else{const v=+t.value;if(!(v>=1&&v<=100)){toast('Target must be 1 to 100%.');return render()}h.tp=v}h.fired=0;save();render()}
-else if(d.s==='sort'){S.sort=t.value;save();render()}else if(d.s==='arch'){showA=t.checked;render()}
+else if(d.s==='sort'){S.sort=t.value;save();render()}else if(d.s==='arch'){showA=t.checked;render()}else if(d.s==='ring'){S.ring=t.value;save()}else if(d.s==='alltp'){const v=+t.value;if(v){S.heroes.forEach(h=>{if(!h.arch){h.tp=v;h.fired=0}});save();render()}}else if(d.s==='imgs'){loadImgs(t.files)}
 else if(d.s==='restore'){const f=t.files[0];f&&f.text().then(x=>{const j=JSON.parse(x);if(!j||!Array.isArray(j.heroes)||!j.px)throw 0;S=j;save();location.reload()}).catch(()=>toast('Invalid backup file.'))}});
 if(S.theme)document.documentElement.dataset.theme=S.theme;
 render();setInterval(tick,1000);refresh();
